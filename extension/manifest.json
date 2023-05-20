@@ -1,0 +1,33 @@
+{
+  "name": "React Chrome Extension",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*", "fonts/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "action": {
+    "default_icon": {
+      "16": "logos/logo.png",
+      "24": "logos/logo.png",
+      "32": "logos/logo.png",
+      "36": "logos/logo.png",
+      "64": "logos/logo.png",
+      "128": "logos/logo.png"
+    },
+    "default_title": "FeedbackSolver"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["activeTab", "scripting"]
+}
