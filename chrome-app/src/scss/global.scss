@@ -12,6 +12,8 @@
   src: url('chrome-extension://__MSG_@@extension_id__/fonts/Poppins-Medium.ttf') format('truetype');
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
 
 #feedbackSolver {
   margin: 0;
@@ -28,7 +30,27 @@
   .wrapper {
     width: 500px;
     height: 270px;
-    overflow: hidden;
     border-radius: 12px;
+    position: relative;
+
+    .closeFeedbackSolver {
+      cursor: pointer;
+      position: absolute;
+      aspect-ratio: 1/1;
+      display: grid;
+      align-content: center;
+      justify-content: center;
+      left: 100%;
+      top: 0%;
+      transform: translate(-50%, -50%);
+      height: 30px;
+      background-color: #E4DFD9;
+      border-radius: 50%;
+      border: 2px solid #522158;
+
+      img {
+        max-height: 25px;
+      }
+    }
   }
 }

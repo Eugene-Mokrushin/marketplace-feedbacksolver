@@ -1,0 +1,116 @@
+.signin {
+  min-width: calc(100% - 30px);
+  padding: 11px 15px 8px 15px;
+  background-color: #E4DFD9;
+
+  .head {
+    display: flex;
+    align-items: center;
+
+    .goBack {
+      cursor: pointer;
+      aspect-ratio: 1/1;
+      display: grid;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      padding: 5px;
+      transition: .3s;
+
+      img {
+        max-height: 25px;
+        transform: translateX(-2px);
+      }
+
+      &:hover {
+        background-color: #E2C4D0;
+      }
+    }
+
+    .signinTitle {
+      user-select: none;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 26px;
+      color: #522158;
+      margin-left: 1rem;
+    }
+  }
+
+  .signinForm {
+    margin: 0 auto;
+    margin-top: 23px;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    flex-direction: column;
+    gap: 1rem;
+
+    input {
+      font-family: 'Poppins', sans-serif;
+      padding: 7px 8px;
+      outline: none;
+      border: 2px solid #522158;
+      border-radius: 4px;
+      background: #E2C4D0;
+      height: 20px;
+      width: 256px;
+      color: #522158;
+      font-size: 14px;
+      font-weight: 600;
+
+      &::placeholder {
+        font-family: 'Poppins', sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 21px;
+        color: rgba(198, 129, 156, 0.65);
+      }
+    }
+
+    .signinMethods {
+      display: flex;
+
+      .viaGoogle {
+        cursor: pointer;
+        display: flex;
+        padding: 0 18px;
+        align-items: center;
+        justify-content: space-around;
+        background-color: #fff;
+        border-radius: 8px;
+        height: 39px;
+        font-family: 'Poppins', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        color: #000000;
+        width: fit-content;
+
+        img {
+          margin-right: 15px;
+          max-height: 24px;
+        }
+      }
+
+      .signinBtn {
+        cursor: pointer;
+        margin-left: 1rem;
+        padding: 0 18px;
+        outline: none;
+        border: none;
+        background-color: #522158;
+        color: #E4DFD9;
+        font-family: 'Poppins', sans-serif;
+        border-radius: 8px;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+      }
+    }
+  }
+}

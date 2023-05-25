@@ -1,15 +1,21 @@
 .wildberries {
-  width: 100%;
+  width: 500px;
+  max-width: 500px;
   height: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  background-color: #E4DFD9;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 18px;
+  border-top-left-radius: 18px;
+  overflow: hidden;
 }
 .wildberries .ribbon {
   cursor: pointer;
+  z-index: 45;
   background-color: #522158;
   width: 48px;
+  min-width: 48px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -37,292 +43,13 @@
   font-family: "Poppins", sans-serif;
   margin: 0 auto;
 }
-.wildberries .content {
-  padding: 11px 14px 8px 15px;
-  width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-}
-.wildberries .content .header {
+.wildberries .elements {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   width: 100%;
-}
-.wildberries .content .header div {
-  cursor: pointer;
-}
-.wildberries .content .header .basic {
-  color: #E4DFD9;
-  font-family: "Poppins", sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  background-color: #522158;
-  border-radius: 19px;
-  height: 34px;
-  display: grid;
-  -ms-flex-line-pack: center;
-      align-content: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  padding: 0 14px;
-  border: 2px solid #522158;
-}
-.wildberries .content .header .pro {
-  margin-left: 10px;
-  font-family: "Poppins", sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  background: #E4DFD9;
-  border: 2px solid #522158;
-  border-radius: 19px;
-  height: 34px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  padding: 0 14px;
-}
-.wildberries .content .header .pro .fill {
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
-  background: linear-gradient(116.68deg, #522158 20.42%, #C2549A 48.55%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-fill-color: transparent;
-}
-.wildberries .content .header .signinWrap {
-  margin-left: auto;
-  background: #E4DFD9;
-  border: 2px solid #522158;
-  color: #522158;
-  height: 34px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  padding: 0 14px;
-  border-radius: 19px;
-}
-.wildberries .content .header .signinWrap .text {
-  font-family: "Poppins", sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-}
-.wildberries .content .header .signinWrap img {
-  margin-left: 7px;
-  max-height: 19px;
-}
-.wildberries .content .main {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-}
-.wildberries .content .main .switches {
-  margin-top: 20px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  gap: 11px;
-}
-.wildberries .content .main .switches .switch {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  gap: 1rem;
-}
-.wildberries .content .main .switches .switch .title {
-  cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  font-family: "Poppins", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 13px;
-  color: #522157;
-}
-.wildberries .content .main .switches .switch input[type=checkbox] {
-  height: 0;
-  width: 0;
-  visibility: hidden;
-}
-.wildberries .content .main .switches .switch .btn {
-  cursor: pointer;
-  text-indent: -9999px;
-  width: 40px;
-  height: 18px;
-  background: #e2c4d0;
-  border: 2px solid #522158;
-  display: block;
-  border-radius: 100px;
-  position: relative;
-}
-.wildberries .content .main .switches .switch .btn:after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  left: 3px;
-  width: 12px;
-  height: 12px;
-  background: #522158;
-  border-radius: 90px;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
-}
-.wildberries .content .main .switches .switch input:checked + .btn {
-  background: #522158;
-}
-.wildberries .content .main .switches .switch input:checked + label:after {
-  background: #e2c4d0;
-  left: calc(100% - 3px);
-  -webkit-transform: translateX(-100%) translateY(-50%);
-          transform: translateX(-100%) translateY(-50%);
-}
-.wildberries .content .main .switches .help {
-  cursor: pointer;
-  width: 100%;
-  text-align: left;
-  margin-top: auto;
-  font-family: "Poppins", sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 15px;
-  margin-left: 1rem;
-  text-decoration-line: underline;
-  color: #522158;
-}
-.wildberries .content .main .startUpload {
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: 17px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-.wildberries .content .main .startUpload .buttonStart {
-  cursor: pointer;
-  display: block;
-  height: 123px;
-  aspect-ratio: 1/1;
-  background-color: #522158;
-  border-radius: 50%;
-  position: relative;
-  -webkit-transition: 0.2s;
-  transition: 0.2s;
-}
-.wildberries .content .main .startUpload .buttonStart .innerStart {
-  visibility: visible;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(calc(-50% + 7px), -50%);
-          transform: translate(calc(-50% + 7px), -50%);
-}
-.wildberries .content .main .startUpload .buttonStart .innerStop {
-  visibility: hidden;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-}
-.wildberries .content .main .startUpload .buttonStart:active {
-  -webkit-transition: 0.2s;
-  transition: 0.2s;
-  -webkit-transform: scale(0.9);
-          transform: scale(0.9);
-}
-.wildberries .content .main .startUpload .startButtonChecker {
-  position: absolute;
-  height: 0;
-  width: 0;
-  visibility: hidden;
-}
-.wildberries .content .main .startUpload .startButtonChecker:checked + .buttonStart .innerStart {
-  visibility: hidden !important;
-}
-.wildberries .content .main .startUpload .startButtonChecker:checked + .buttonStart .innerStop {
-  visibility: visible !important;
-}
-.wildberries .content .main .startUpload .upload {
-  cursor: pointer;
-  margin-top: 15px;
-  border: 2px solid #522158;
-  background-color: #E4DFD9;
-  border-radius: 4px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
-  padding: 2px 10px;
-}
-.wildberries .content .main .startUpload .upload .text {
-  font-family: "Poppins", sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  color: #522157;
-}
-.wildberries .content .main .startUpload .upload img {
-  margin-left: 7px;
-  max-height: 25px;
-}
-.wildberries .content .main .startUpload .template {
-  cursor: pointer;
-  margin-top: auto;
-  font-family: "Poppins", sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 15px;
-  text-align: center;
-  text-decoration-line: underline;
-  color: #522157;
+  -webkit-transition: -webkit-transform 0.4s ease-in-out;
+  transition: -webkit-transform 0.4s ease-in-out;
+  transition: transform 0.4s ease-in-out;
+  transition: transform 0.4s ease-in-out, -webkit-transform 0.4s ease-in-out;
 }
