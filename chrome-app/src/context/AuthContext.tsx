@@ -1,44 +1,66 @@
-import React, {
-  JSXElementConstructor,
-  ReactElement,
+import {
+  createContext,
+  ReactNode,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from "react";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  User,
+} from "firebase/auth";
 import { auth } from "../firebase";
-import { UserInfo } from "firebase/auth";
 
-// @ts-ignore
-const AuthContext = React.createContext();
-
-interface AuthProviderProps {
-  children: ReactElement<any, string | JSXElementConstructor<any>>;
+interface UserContextProps {
+  createUser: (email: string, password: string) => Promise<unknown>;
+  user: User | null;
+  logout: () => void;
+  signIn: (email: string, password: string) => Promise<unknown>;
 }
 
-interface AuthContextValue {
-  currentUser: UserInfo | null;
-}
+export const UserContext = createContext<UserContextProps>({
+  createUser: () => Promise.resolve(),
+  user: null,
+  logout: () => Promise.resolve(),
+  signIn: () => Promise.resolve(),
+});
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
 
-export function AuthProvider({ children }: AuthProviderProps) {
-  const [currentUser, setCurrentUser] = useState<UserInfo | null>(null);
+  const createUser = async (email: string, password: string) => {
+    return await createUserWithEmailAndPassword(auth, email, password);
+  };
 
-  async function signup(email: string, password: string) {
-    return await auth.createUserWithEmailAndPassword(email, password);
-  }
+  const signIn = async (email: string, password: string) => {
+    return await signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const logout = async () => {
+    return await signOut(auth);
+  };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log(currentUser);
+      setUser(currentUser);
     });
-    return unsubscribe;
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
-  const value = useMemo(() => ({ currentUser, signup }), [currentUser]);
+  return (
+    <UserContext.Provider value={{ createUser, user, logout, signIn }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
+export const UserAuth = () => {
+  return useContext(UserContext);
+};

@@ -1,6 +1,9 @@
 .signin {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   min-width: calc(100% - 30px);
   padding: 11px 15px 8px 15px;
+  height: 100%;
   background-color: #E4DFD9;
 }
 .signin .head {
@@ -45,7 +48,12 @@
   font-weight: 600;
   font-size: 26px;
   color: #522158;
-  margin-left: 1rem;
+  margin: 0 auto;
+  -webkit-transform: translateX(-35px);
+          transform: translateX(-35px);
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 .signin .signinForm {
   margin: 0 auto;
@@ -79,6 +87,8 @@
   font-weight: 600;
 }
 .signin .signinForm input::-webkit-input-placeholder {
+  -webkit-user-select: none;
+          user-select: none;
   font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 600;
@@ -87,6 +97,8 @@
   color: rgba(198, 129, 156, 0.65);
 }
 .signin .signinForm input::-moz-placeholder {
+  -moz-user-select: none;
+       user-select: none;
   font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 600;
@@ -95,6 +107,8 @@
   color: rgba(198, 129, 156, 0.65);
 }
 .signin .signinForm input:-ms-input-placeholder {
+  -ms-user-select: none;
+      user-select: none;
   font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 600;
@@ -103,6 +117,8 @@
   color: rgba(198, 129, 156, 0.65);
 }
 .signin .signinForm input::-ms-input-placeholder {
+  -ms-user-select: none;
+      user-select: none;
   font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 600;
@@ -111,6 +127,10 @@
   color: rgba(198, 129, 156, 0.65);
 }
 .signin .signinForm input::placeholder {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 600;
@@ -125,6 +145,10 @@
 }
 .signin .signinForm .signinMethods .viaGoogle {
   cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -146,12 +170,26 @@
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  border: 1px solid black;
 }
 .signin .signinForm .signinMethods .viaGoogle img {
   margin-right: 15px;
   max-height: 24px;
 }
+.signin .signinForm .signinMethods .viaGoogle:hover {
+  background-color: #eeeeee;
+}
+.signin .signinForm .signinMethods .viaGoogle:active {
+  -webkit-transform: scale(0.95);
+          transform: scale(0.95);
+}
 .signin .signinForm .signinMethods .signinBtn {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
   margin-left: 1rem;
   padding: 0 18px;
@@ -164,4 +202,25 @@
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+.signin .signinForm .signinMethods .signinBtn:hover {
+  background-color: #562e5c;
+}
+.signin .signinForm .signinMethods .signinBtn:active {
+  -webkit-transform: scale(0.95);
+          transform: scale(0.95);
+}
+.signin .noAccount {
+  cursor: pointer;
+  text-align: center;
+  margin-top: 12px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 22px;
+  text-decoration-line: underline;
+  color: #522158;
 }

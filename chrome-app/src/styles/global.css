@@ -48,6 +48,7 @@
   background-color: #E4DFD9;
   border-radius: 50%;
   border: 2px solid #522158;
+  z-index: 9999;
 }
 #feedbackSolver .wrapper .closeFeedbackSolver img {
   max-height: 25px;

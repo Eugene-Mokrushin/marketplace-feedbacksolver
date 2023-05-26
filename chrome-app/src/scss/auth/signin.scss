@@ -1,6 +1,8 @@
 .signin {
+  box-sizing: border-box;
   min-width: calc(100% - 30px);
   padding: 11px 15px 8px 15px;
+  height: 100%;
   background-color: #E4DFD9;
 
   .head {
@@ -35,7 +37,9 @@
       font-weight: 600;
       font-size: 26px;
       color: #522158;
-      margin-left: 1rem;
+      margin: 0 auto;
+      transform: translateX(-35px);
+      width: fit-content;
     }
   }
 
@@ -62,6 +66,7 @@
       font-weight: 600;
 
       &::placeholder {
+        user-select: none;
         font-family: 'Poppins', sans-serif;
         font-style: normal;
         font-weight: 600;
@@ -76,6 +81,7 @@
 
       .viaGoogle {
         cursor: pointer;
+        user-select: none;
         display: flex;
         padding: 0 18px;
         align-items: center;
@@ -90,14 +96,25 @@
         line-height: 24px;
         color: #000000;
         width: fit-content;
+        transition: .2s;
+        border: 1px solid black;
 
         img {
           margin-right: 15px;
           max-height: 24px;
         }
+
+        &:hover {
+          background-color: #eeeeee;
+        }
+
+        &:active {
+          transform: scale(0.95);
+        }
       }
 
       .signinBtn {
+        user-select: none;
         cursor: pointer;
         margin-left: 1rem;
         padding: 0 18px;
@@ -110,7 +127,30 @@
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
+        transition: .2s;
+
+        &:hover {
+          background-color: #562e5c;
+        }
+
+        &:active {
+          transform: scale(0.95);
+        }
       }
     }
+  }
+
+  .noAccount {
+    cursor: pointer;
+    text-align: center;
+    margin-top: 12px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 22px;
+    text-decoration-line: underline;
+
+    color: #522158;
   }
 }

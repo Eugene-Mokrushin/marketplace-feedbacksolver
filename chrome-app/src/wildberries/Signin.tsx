@@ -1,9 +1,7 @@
-import firebase from "firebase/compat/app";
-import * as firebaseui from "firebaseui";
-import "firebaseui/dist/firebaseui.css";
 import "../styles/signin.css";
 import arrowBack from "../assets/arrowBack.svg";
 import google from "../assets/google.svg";
+import { MouseEvent, useRef } from "react";
 
 interface SigninProps {
   toLoggedin: () => void;
@@ -11,10 +9,18 @@ interface SigninProps {
 }
 
 const Signin = ({ toLoggedin, toSignup }: SigninProps) => {
+
+  const emailRef = useRef<HTMLInputElement>(null)
+  const passwordRef = useRef<HTMLInputElement>(null)
+
+  const handleSignIn = (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="signin">
       <div className="head">
-        <div className="goBack">
+        <div className="goBack" onClick={() => toLoggedin()}>
           <img
             src={
               chrome.runtime
@@ -41,12 +47,21 @@ const Signin = ({ toLoggedin, toSignup }: SigninProps) => {
             />
             <span className="text">Via Google</span>
           </div>
-          <button className="signinBtn">Sign in</button>
+          <button className="signinBtn" onClick={(e) => handleSignIn(e)}>
+            Sign in
+          </button>
         </div>
       </form>
-      <div className="noAccount">Don’t have an account? Sign up</div>
+      <div className="noAccount" onClick={() => toSignup()}>
+        Don’t have an account? Sign up
+      </div>
     </div>
   );
 };
+
+function validateEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
 
 export default Signin;

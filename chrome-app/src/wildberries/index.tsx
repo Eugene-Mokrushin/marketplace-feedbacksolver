@@ -2,8 +2,8 @@ import "../styles/wildberries.css";
 import wbLogo from "../assets/wbLogo.png";
 import Main from "./Main";
 import Signin from "./Signin";
-import { useRef } from "react";
 import Signup from "./Signup";
+import { useEffect, useRef } from "react";
 
 const Wildberries = () => {
   const elementsRef = useRef<HTMLDivElement>(null);
@@ -11,6 +11,12 @@ const Wildberries = () => {
   const signup = () => {
     if (elementsRef.current) {
       elementsRef.current.style.transform = "translate(-100%, -100%)";
+    }
+  };
+
+  const goBackToLogin = () => {
+    if (elementsRef.current) {
+      elementsRef.current.style.transform = "translate(-100%, 0%)";
     }
   };
 
@@ -31,6 +37,12 @@ const Wildberries = () => {
     }
   };
 
+  useEffect(() => {
+    if (elementsRef.current) {
+      elementsRef.current.style.transform = "translateX(-100%)";
+    }
+  }, []);
+
   return (
     <div className="wildberries">
       <div className="ribbon">
@@ -43,9 +55,17 @@ const Wildberries = () => {
         />
       </div>
       <div className="elements" ref={elementsRef}>
-        {/* <Main toLogin={login} /> */}
-        <Signin toLoggedin={loggedin} toSignup={signup} />
-        {/* <Signup toSignedup={signedup} /> */}
+        <div className="main">
+          <Main toLogin={login} />
+        </div>
+        <div className="authenticate">
+          <div className="authenticateSignIn">
+            <Signin toLoggedin={loggedin} toSignup={signup} />
+          </div>
+          <div className="authenticateSignUp">
+            <Signup toSignedup={signedup} goBackToLogin={goBackToLogin} />
+          </div>
+        </div>
       </div>
     </div>
   );
