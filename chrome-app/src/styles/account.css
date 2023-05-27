@@ -5,11 +5,22 @@
   padding: 11px 15px 8px 15px;
   height: 100%;
   background-color: #E4DFD9;
-  position: relative;
   font-family: "Poppins", sans-serif;
 }
-.accountDataWrap .goBack {
+.accountDataWrap .head {
+  position: relative;
+  width: calc(100% - 35px);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-left: 35px;
+}
+.accountDataWrap .head .goBack {
   position: absolute;
+  left: 0;
   cursor: pointer;
   aspect-ratio: 1/1;
   display: grid;
@@ -24,37 +35,310 @@
   -webkit-transition: 0.3s;
   transition: 0.3s;
 }
-.accountDataWrap .goBack img {
+.accountDataWrap .head .goBack img {
   max-height: 25px;
 }
-.accountDataWrap .goBack:hover {
+.accountDataWrap .head .goBack:hover {
   background-color: #E2C4D0;
 }
-.accountDataWrap .title {
+.accountDataWrap .head .userName {
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.accountDataWrap .head .userName .name {
+  cursor: context-menu;
+  max-width: 250px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font-style: normal;
   font-weight: 600;
-  font-size: 26px;
-  color: #522158;
-  text-align: center;
-}
-.accountDataWrap .currentEmail {
-  color: #522158;
-  text-align: center;
   font-size: 20px;
-  margin-top: 1rem;
+  line-height: 30px;
+  color: #522158;
+  background-color: #E4DFD9;
+  border: none;
+  padding: 0;
 }
-.accountDataWrap .signOut {
+.accountDataWrap .head .userName .name:focus {
+  outline: none;
+  border-bottom: 1px dashed #522158;
+}
+.accountDataWrap .head .userName img {
   cursor: pointer;
+  margin-left: 5px;
+  max-height: 18px;
+  opacity: 0.5;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+.accountDataWrap .head .userName img:hover {
+  opacity: 1 !important;
+}
+.accountDataWrap .head .logout {
+  margin-left: auto;
+  cursor: pointer;
+  padding: 0px 8px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  text-align: center;
+  color: #E4DFD9;
+  height: 28px;
+  background: #522158;
+  border: 2px solid #522158;
+  border-radius: 18px;
+  display: grid;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+.accountDataWrap .head .logout:hover {
+  color: #522158;
+  background-color: #E4DFD9;
+}
+.accountDataWrap .main {
+  margin-top: 10px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.accountDataWrap .main .stats {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  color: #E4DFD9;
-  background-color: #522158;
-  padding: 5px 7px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 12px;
+}
+.accountDataWrap .main .stats .plan {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 16px;
-  border-radius: 4px;
-  margin: 0 auto;
-  margin-top: 20px;
+  line-height: 22px;
+  color: #522158;
+}
+.accountDataWrap .main .stats .tokenB span,
+.accountDataWrap .main .stats .tokenP span {
+  font-style: normal;
+  font-size: 16px;
+  line-height: 22px;
+  color: #522158;
+}
+.accountDataWrap .main .stats .enumWrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.accountDataWrap .main .stats .enumWrap img {
+  cursor: pointer;
+  max-height: 20px;
+}
+.accountDataWrap .main .stats .enumWrap .textWrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.accountDataWrap .main .stats .enumWrap .tokenCount {
+  margin-left: 10px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 18px;
+  color: #C2549A;
+}
+.accountDataWrap .main .stats .enumWrap .symbol {
+  margin-left: 5px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 18px;
+  color: #FFFFFF;
+}
+.accountDataWrap .main .stats .accountBold {
+  font-weight: 500;
+}
+.accountDataWrap .main .stats .explain {
+  margin-top: auto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #522158;
+  white-space: nowrap;
+}
+.accountDataWrap .main .plans {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  gap: 10px;
+  margin-left: 15px;
+}
+.accountDataWrap .main .plans .basicAndMore {
+  width: 125px;
+}
+.accountDataWrap .main .plans .basicAndMore .basic {
+  background: #E4DFD9;
+  border: 2px solid #522158;
+  border-radius: 8px;
+}
+.accountDataWrap .main .plans .basicAndMore .basic .title {
+  text-align: center;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+  color: #522158;
+}
+.accountDataWrap .main .plans .basicAndMore .basic .perksList {
+  padding: 0 5px;
+  margin: unset;
+  list-style-type: none;
+}
+.accountDataWrap .main .plans .basicAndMore .basic .perksList .perk {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 6px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 15px;
+  color: #522158;
+}
+.accountDataWrap .main .plans .basicAndMore .basic .perksList .perk .marker {
+  -webkit-transform: translateY(5px);
+          transform: translateY(5px);
+  min-height: 4px;
+  max-height: 4px;
+  aspect-ratio: 1/1 !important;
+  border-radius: 50%;
+  min-width: 4px;
+  max-width: 4px;
+  background-color: #522158;
+}
+.accountDataWrap .main .plans .basicAndMore .basic .perksList .perk .text {
+  margin-left: 5px;
+}
+.accountDataWrap .main .plans .basicAndMore .basic .current {
+  border-top: 2px solid #522158;
+  text-align: center;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  color: #522157;
+}
+.accountDataWrap .main .plans .basicAndMore .more {
+  cursor: pointer;
+  margin-top: 10px;
+  text-align: center;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  text-decoration-line: underline;
+  color: #522157;
+}
+.accountDataWrap .main .plans .pro {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  overflow: hidden;
+  width: 145px;
+  background: #e7e6e7;
+  border: 2px solid #522158;
+  border-radius: 8px;
+}
+.accountDataWrap .main .plans .pro .title {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+  text-align: center;
+}
+.accountDataWrap .main .plans .pro .title .text {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  background: linear-gradient(116.68deg, #522158 20.42%, #C2549A 48.55%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+.accountDataWrap .main .plans .pro .perksList {
+  padding: 0px 5px;
+  margin: unset;
+  list-style-type: none;
+}
+.accountDataWrap .main .plans .pro .perksList .perk {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 6px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 15px;
+  color: #522158;
+}
+.accountDataWrap .main .plans .pro .perksList .perk img {
+  -webkit-transform: translateY(3px);
+          transform: translateY(3px);
+  max-height: 8px;
+  margin-right: 5px;
+}
+.accountDataWrap .main .plans .pro .perksList .fancy {
+  background: linear-gradient(259.96deg, #522158 42.88%, #f5009b 93.84%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+.accountDataWrap .main .plans .pro .ctaPro {
+  overflow: hidden;
+  cursor: pointer;
+  text-align: center;
+  font-style: normal;
+  font-weight: 400;
+  padding: 2px 0px;
+  font-size: 15px;
+  line-height: 22px;
+  display: grid;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: #522157;
+  color: #E4DFD9;
 }

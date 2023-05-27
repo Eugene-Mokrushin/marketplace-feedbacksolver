@@ -4,55 +4,331 @@
   padding: 11px 15px 8px 15px;
   height: 100%;
   background-color: #E4DFD9;
-  position: relative;
   font-family: 'Poppins', sans-serif;
 
-  .goBack {
-    position: absolute;
-    cursor: pointer;
-    aspect-ratio: 1/1;
-    display: grid;
+  .head {
+    position: relative;
+    width: calc(100% - 35px);
+    display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    padding: 5px;
-    transition: .3s;
+    padding-left: 35px;
 
-    img {
-      max-height: 25px;
+    .goBack {
+      position: absolute;
+      left: 0;
+      cursor: pointer;
+      aspect-ratio: 1/1;
+      display: grid;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      padding: 5px;
+      transition: .3s;
+
+      img {
+        max-height: 25px;
+      }
+
+      &:hover {
+        background-color: #E2C4D0;
+      }
     }
 
-    &:hover {
-      background-color: #E2C4D0;
+    .userName {
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+
+      .name {
+        cursor: context-menu;
+        max-width: 250px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 30px;
+        color: #522158;
+        background-color: #E4DFD9;
+        border: none;
+        padding: 0;
+
+        &:focus {
+          outline: none;
+          border-bottom: 1px dashed #522158;
+        }
+      }
+
+      img {
+        cursor: pointer;
+        margin-left: 5px;
+        max-height: 18px;
+        opacity: 0.5;
+        transition: .3s;
+
+        &:hover {
+          opacity: 1 !important;
+        }
+      }
+    }
+
+    .logout {
+      margin-left: auto;
+      cursor: pointer;
+      padding: 0px 8px;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 22px;
+      text-align: center;
+      color: #E4DFD9;
+      height: 28px;
+      background: #522158;
+      border: 2px solid #522158;
+      border-radius: 18px;
+      display: grid;
+      align-items: center;
+      justify-content: center;
+      transition: .3s;
+
+      &:hover {
+        color: #522158;
+        background-color: #E4DFD9;
+      }
     }
   }
 
-  .title {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 26px;
-    color: #522158;
-    text-align: center;
+  .main {
+    margin-top: 10px;
+    height: fit-content;
+    display: flex;
+
+    .stats {
+      width: fit-content;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .plan {
+        width: fit-content;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        color: #522158;
+      }
+
+      .tokenB,
+      .tokenP {
+        span {
+          font-style: normal;
+          font-size: 16px;
+          line-height: 22px;
+
+          color: #522158
+        }
+      }
+
+      .enumWrap {
+        display: flex;
+        align-items: center;
+
+        img {
+          cursor: pointer;
+          max-height: 20px;
+        }
+
+        .textWrap {
+          display: flex;
+
+
+        }
+        .tokenCount {
+          margin-left: 10px;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 18px;
+          color: #C2549A;
+        }
+
+        .symbol {
+          margin-left: 5px;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 18px;
+          color: #FFFFFF;
+
+        }
+      }
+
+      .accountBold {
+        font-weight: 500;
+      }
+
+      .explain {
+        margin-top: auto;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #522158;
+        white-space: nowrap;
+      }
+    }
+
+    .plans {
+      display: flex;
+      height: fit-content;
+      gap: 10px;
+      margin-left: 15px;
+
+      .basicAndMore {
+        width: 125px;
+
+        .basic {
+          background: #E4DFD9;
+          border: 2px solid #522158;
+          border-radius: 8px;
+
+          .title {
+            text-align: center;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 20px;
+            line-height: 30px;
+            color: #522158;
+          }
+
+          .perksList {
+            padding: 0 5px;
+            margin: unset;
+            list-style-type: none;
+
+            .perk {
+              display: flex;
+              margin-bottom: 6px;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 11px;
+              line-height: 15px;
+              color: #522158;
+
+              .marker {
+                transform: translateY(5px);
+                min-height: 4px;
+                max-height: 4px;
+                aspect-ratio: 1/1 !important;
+                border-radius: 50%;
+                min-width: 4px;
+                max-width: 4px;
+                background-color: #522158;
+              }
+
+              .text {
+                margin-left: 5px;
+              }
+            }
+          }
+
+          .current {
+            border-top: 2px solid #522158;
+            text-align: center;
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 22px;
+            color: #522157;
+          }
+        }
+
+        .more {
+          cursor: pointer;
+          margin-top: 10px;
+          text-align: center;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 21px;
+          text-decoration-line: underline;
+          color: #522157;
+        }
+      }
+
+      .pro {
+        height: fit-content;
+        overflow: hidden;
+        width: 145px;
+        background: #e7e6e7;
+        border: 2px solid #522158;
+        border-radius: 8px;
+
+        .title {
+          font-style: normal;
+          font-weight: 400;
+          font-size: 20px;
+          line-height: 30px;
+          text-align: center;
+
+          .text {
+            height: fit-content;
+            background: linear-gradient(116.68deg, #522158 20.42%, #C2549A 48.55%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+          }
+        }
+
+        .perksList {
+          padding: 0px 5px;
+          margin: unset;
+          list-style-type: none;
+
+          .perk {
+            display: flex;
+            margin-bottom: 6px;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 11px;
+            line-height: 15px;
+            color: #522158;
+
+            img {
+              transform: translateY(3px);
+              max-height: 8px;
+              margin-right: 5px;
+            }
+          }
+
+          .fancy {
+            background: linear-gradient(259.96deg, #522158 42.88%, #f5009b 93.84%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+          }
+        }
+
+        .ctaPro {
+          overflow: hidden;
+          cursor: pointer;
+          text-align: center;
+          font-style: normal;
+          font-weight: 400;
+          padding: 2px 0px;
+          font-size: 15px;
+          line-height: 22px;
+          display: grid;
+          align-items: center;
+          background: #522157;
+          color: #E4DFD9;
+        }
+      }
+    }
   }
 
-  .currentEmail {
-    color: #522158;
-    text-align: center;
-    font-size: 20px;
-    margin-top: 1rem;
-  }
 
-  .signOut {
-    cursor: pointer;
-    width: fit-content;
-    color: #E4DFD9;
-    background-color: #522158;
-    padding: 5px 7px;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    border-radius: 4px;
-    margin: 0 auto;
-    margin-top: 20px;
-  }
 }

@@ -55,7 +55,7 @@ function Main({ toAccount }: MainProps) {
     );
   });
 
-  const downloadTemplate = async () => {
+  const downloadTemplate = async (): Promise<void> => {
     try {
       await fetch("http://localhost:2001/excel/download/basic")
         .then((response) => response.blob())
@@ -71,7 +71,9 @@ function Main({ toAccount }: MainProps) {
     }
   };
 
-  const uploadTemplate = async (e: ChangeEvent<HTMLInputElement>) => {
+  const uploadTemplate = async (
+    e: ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {
     if (e.target.files) {
       try {
         const file = e.target.files[0];
@@ -124,7 +126,7 @@ function Main({ toAccount }: MainProps) {
                   ? chrome.runtime.getURL("assets/person.svg")
                   : person
               }
-              alt="percon_ico"
+              alt="person_ico"
             />
           </div>
         </div>
@@ -192,7 +194,7 @@ function Main({ toAccount }: MainProps) {
               alt="Upload with excel"
             />
           </div>
-          <div className="template" onClick={downloadTemplate}>
+          <div className="template" onClick={() => downloadTemplate()}>
             Download template
           </div>
         </div>

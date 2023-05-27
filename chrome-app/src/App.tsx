@@ -9,7 +9,9 @@ function App() {
 
   const handleClose = () => {
     const mainPopup = document.querySelector("#feedbackSolver");
-    mainPopup && mainPopup.remove();
+    if (mainPopup) {
+      mainPopup.remove();
+    }
   };
 
   return (

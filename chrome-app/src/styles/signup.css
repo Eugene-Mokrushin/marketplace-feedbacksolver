@@ -40,7 +40,6 @@
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  width: 100%;
   font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 600;
@@ -316,7 +315,7 @@
   height: 44px;
   background: #522158;
   border-radius: 8px;
-  font-family: "Poppins";
+  font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 24px;

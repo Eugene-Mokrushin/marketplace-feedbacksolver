@@ -18,6 +18,9 @@ const Wildberries = () => {
     } else {
       setAction("unsigned");
     }
+    if (elementsRef.current) {
+      elementsRef.current.style.transform = "translateX(-100%)";
+    }
   }, [user]);
 
   const signup = () => {
