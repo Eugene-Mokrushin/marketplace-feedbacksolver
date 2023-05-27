@@ -69,11 +69,23 @@
       -ms-flex-direction: column;
           flex-direction: column;
 }
-.wildberries .elements .authenticate .authenticateSignIn {
+.wildberries .elements .authenticate .authenticateSignIn,
+.wildberries .elements .authenticate .authenticateSignUp {
   width: 452px;
   min-height: 270px;
 }
-.wildberries .elements .authenticate .authenticateSignUp {
+.wildberries .elements .signed {
+  max-width: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.wildberries .elements .signed .signedAccount {
   width: 452px;
   min-height: 270px;
 }

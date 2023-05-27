@@ -3,10 +3,22 @@ import wbLogo from "../assets/wbLogo.png";
 import Main from "./Main";
 import Signin from "./Signin";
 import Signup from "./Signup";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { UserAuth } from "../context/AuthContext";
+import Account from "./Account";
 
 const Wildberries = () => {
   const elementsRef = useRef<HTMLDivElement>(null);
+  const [action, setAction] = useState("unsigned");
+  const { user } = UserAuth();
+
+  useEffect(() => {
+    if (user) {
+      setAction("signed");
+    } else {
+      setAction("unsigned");
+    }
+  }, [user]);
 
   const signup = () => {
     if (elementsRef.current) {
@@ -25,7 +37,7 @@ const Wildberries = () => {
       elementsRef.current.style.transform = "translate(0%, 0%)";
     }
   };
-  const login = () => {
+  const toAccount = () => {
     if (elementsRef.current) {
       elementsRef.current.style.transform = "translateX(-100%)";
     }
@@ -36,12 +48,6 @@ const Wildberries = () => {
       elementsRef.current.style.transform = "translateX(0%)";
     }
   };
-
-  useEffect(() => {
-    if (elementsRef.current) {
-      elementsRef.current.style.transform = "translateX(-100%)";
-    }
-  }, []);
 
   return (
     <div className="wildberries">
@@ -56,16 +62,25 @@ const Wildberries = () => {
       </div>
       <div className="elements" ref={elementsRef}>
         <div className="main">
-          <Main toLogin={login} />
+          <Main toAccount={toAccount} />
         </div>
-        <div className="authenticate">
-          <div className="authenticateSignIn">
-            <Signin toLoggedin={loggedin} toSignup={signup} />
+        {action === "unsigned" && (
+          <div className="authenticate">
+            <div className="authenticateSignIn">
+              <Signin toLoggedin={loggedin} toSignup={signup} />
+            </div>
+            <div className="authenticateSignUp">
+              <Signup toSignedup={signedup} goBackToLogin={goBackToLogin} />
+            </div>
           </div>
-          <div className="authenticateSignUp">
-            <Signup toSignedup={signedup} goBackToLogin={goBackToLogin} />
+        )}
+        {action === "signed" && (
+          <div className="signed">
+            <div className="signedAccount">
+              <Account signedup={signedup} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

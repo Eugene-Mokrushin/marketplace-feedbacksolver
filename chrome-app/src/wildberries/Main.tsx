@@ -1,19 +1,23 @@
-import { ChangeEvent, MouseEvent, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
+import { UserAuth } from "../context/AuthContext";
 import person from "../assets/person.svg";
 import excel from "../assets/excel.png";
 import "../styles/content.css";
+import { User } from "firebase/auth";
 
 interface MainProps {
-  toLogin: () => void;
+  toAccount: () => void;
 }
 
-function Main({ toLogin }: MainProps) {
+function Main({ toAccount }: MainProps) {
   const [switchesValues, setSwitchesValues] = useState([
     { label: "Await confirmation", value: true, key: "conf" },
     { label: "Autofill entire page", value: false, key: "autofill" },
     { label: "Paginate", value: false, key: "paginte" },
     { label: "Only 5-star feedback", value: true, key: "5" },
   ]);
+
+  const { user } = UserAuth();
 
   const mainButtonRef = useRef<HTMLInputElement>(null);
   const [globalFile, setGlobalFile] = useState([]);
@@ -105,16 +109,24 @@ function Main({ toLogin }: MainProps) {
             <span className="fill">PRO</span> <span className="stars">✨</span>
           </div>
         </div>
-        <div className="signinWrap" onClick={() => toLogin()}>
-          <div className="text">Sign in</div>
-          <img
-            src={
-              chrome.runtime
-                ? chrome.runtime.getURL("assets/person.svg")
-                : person
-            }
-            alt="percon_ico"
-          />
+        <div className="signinWrap" onClick={() => toAccount()}>
+          {user ? (
+            <div className="textEmail">
+              {user && (user as User).email?.split("@")[0]}
+            </div>
+          ) : (
+            <div className="text">Sign in</div>
+          )}
+          <div className="imgWrap">
+            <img
+              src={
+                chrome.runtime
+                  ? chrome.runtime.getURL("assets/person.svg")
+                  : person
+              }
+              alt="percon_ico"
+            />
+          </div>
         </div>
       </div>
       <div className="main">

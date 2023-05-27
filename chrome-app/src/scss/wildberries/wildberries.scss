@@ -52,15 +52,24 @@
       display: flex;
       flex-direction: column;
 
-      .authenticateSignIn {
+      .authenticateSignIn,
+      .authenticateSignUp {
         width: 452px;
         min-height: 270px;
 
       }
+    }
 
-      .authenticateSignUp {
+    .signed {
+      max-width: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .signedAccount {
         width: 452px;
         min-height: 270px;
+
       }
     }
   }

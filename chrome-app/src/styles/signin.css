@@ -73,6 +73,33 @@
           flex-direction: column;
   gap: 1rem;
 }
+.signin .signinForm .signInEmailInput {
+  position: relative;
+}
+.signin .signinForm .signInEmailInput .realEmail,
+.signin .signinForm .signInEmailInput .wrongCredentials {
+  display: none;
+  font-family: "Poppins", sans-serif;
+  position: absolute;
+  top: 2px;
+  -webkit-transform: translateY(-100%);
+          transform: translateY(-100%);
+  left: 2px;
+  font-size: 12px;
+  color: #eb6363;
+}
+.signin .signinForm .signInPasswordInput {
+  position: relative;
+}
+.signin .signinForm .signInPasswordInput img {
+  cursor: pointer;
+  position: absolute;
+  max-height: 30px;
+  top: 50%;
+  left: calc(100% - 10px);
+  -webkit-transform: translate(-100%, -50%);
+          transform: translate(-100%, -50%);
+}
 .signin .signinForm input {
   font-family: "Poppins", sans-serif;
   padding: 7px 8px;

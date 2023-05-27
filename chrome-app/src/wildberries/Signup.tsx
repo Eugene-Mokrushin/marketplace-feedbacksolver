@@ -46,6 +46,27 @@ const Signup = ({ toSignedup, goBackToLogin }: SignupProps) => {
     }
   };
 
+  const dropStyles = () => {
+    if (
+      passwordRef.current &&
+      passwordRepeatRef.current &&
+      passwordsMatchRef.current &&
+      passwordsWarnRef.current &&
+      emailCorrectRef.current &&
+      emailRef.current
+    ) {
+      emailRef.current.value = "";
+      emailRef.current.style.borderColor = "#522158";
+      emailCorrectRef.current.style.display = "none";
+      passwordRef.current.value = "";
+      passwordsMatchRef.current.style.display = "none";
+      passwordsWarnRef.current.style.display = "none";
+      passwordRef.current.style.borderColor = "#522158";
+      passwordRepeatRef.current.value = "";
+      passwordRepeatRef.current.style.borderColor = "#522158";
+    }
+  };
+
   const handleCorrelatePasswords = (e: ChangeEvent<HTMLInputElement>) => {
     if (
       passwordRef.current &&
@@ -119,7 +140,13 @@ const Signup = ({ toSignedup, goBackToLogin }: SignupProps) => {
       {!sentEmail ? (
         <>
           <div className="signupHead">
-            <div className="goBack" onClick={() => goBackToLogin()}>
+            <div
+              className="goBack"
+              onClick={() => {
+                goBackToLogin();
+                dropStyles();
+              }}
+            >
               <img
                 src={
                   chrome.runtime
