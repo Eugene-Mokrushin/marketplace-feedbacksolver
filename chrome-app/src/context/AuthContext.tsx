@@ -1,8 +1,10 @@
 import {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import {
@@ -11,6 +13,8 @@ import {
   signOut,
   onAuthStateChanged,
   User,
+  GoogleAuthProvider,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase";
 
@@ -19,6 +23,8 @@ interface UserContextProps {
   user: User | null;
   logout: () => void;
   signIn: (email: string, password: string) => Promise<unknown>;
+  changeUsername: (username: string) => Promise<unknown>;
+  username: string;
 }
 
 export const UserContext = createContext<UserContextProps>({
@@ -26,27 +32,63 @@ export const UserContext = createContext<UserContextProps>({
   user: null,
   logout: () => Promise.resolve(),
   signIn: () => Promise.resolve(),
+  changeUsername: () => Promise.resolve(),
+  username: "",
 });
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [username, setUsername] = useState(user?.displayName ?? "");
+  const provider = new GoogleAuthProvider();
 
-  const createUser = async (email: string, password: string) => {
-    return await createUserWithEmailAndPassword(auth, email, password);
-  };
+  const createUser = useCallback(async (email: string, password: string) => {
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+    const user = res.user;
+    if (user?.email && auth.currentUser) {
+      await updateProfile(auth.currentUser, {
+        displayName: user.email.split("@")[0],
+      });
+      setUsername(user.email.split("@")[0]);
+    }
+  }, []);
 
-  const signIn = async (email: string, password: string) => {
-    return await signInWithEmailAndPassword(auth, email, password);
-  };
+  const changeUsername = useCallback(async (username: string) => {
+    if (auth.currentUser && username !== auth.currentUser.displayName) {
+      try {
+        await updateProfile(auth.currentUser, {
+          displayName: username,
+        });
+        setUsername(username);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, []);
 
-  const logout = async () => {
+  const signIn = useCallback(
+    async (email: string, password: string) => {
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log(user?.displayName);
+      console.log(auth.currentUser);
+      if (user?.displayName) {
+        setUsername(user?.displayName);
+      } else if (auth.currentUser?.email) {
+        setUsername(auth.currentUser.email?.split("@")[0]);
+      }
+    },
+    [user?.displayName]
+  );
+
+  const logout = useCallback(async () => {
     return await signOut(auth);
-  };
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log(currentUser);
       setUser(currentUser);
+      if (currentUser?.displayName) {
+        setUsername(currentUser?.displayName);
+      }
     });
 
     return () => {
@@ -54,10 +96,13 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
+  const contextValue = useMemo(
+    () => ({ createUser, user, logout, signIn, changeUsername, username }),
+    [createUser, user, logout, signIn, changeUsername, username]
+  );
+
   return (
-    <UserContext.Provider value={{ createUser, user, logout, signIn }}>
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
   );
 };
 

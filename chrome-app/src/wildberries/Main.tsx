@@ -3,7 +3,6 @@ import { UserAuth } from "../context/AuthContext";
 import person from "../assets/person.svg";
 import excel from "../assets/excel.png";
 import "../styles/content.css";
-import { User } from "firebase/auth";
 
 interface MainProps {
   toAccount: () => void;
@@ -16,8 +15,7 @@ function Main({ toAccount }: MainProps) {
     { label: "Paginate", value: false, key: "paginte" },
     { label: "Only 5-star feedback", value: true, key: "5" },
   ]);
-
-  const { user } = UserAuth();
+  const { user, username } = UserAuth();
 
   const mainButtonRef = useRef<HTMLInputElement>(null);
   const [globalFile, setGlobalFile] = useState([]);
@@ -113,9 +111,7 @@ function Main({ toAccount }: MainProps) {
         </div>
         <div className="signinWrap" onClick={() => toAccount()}>
           {user ? (
-            <div className="textEmail">
-              {user && (user as User).email?.split("@")[0]}
-            </div>
+            <div className="textEmail">{username}</div>
           ) : (
             <div className="text">Sign in</div>
           )}

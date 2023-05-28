@@ -2,7 +2,6 @@
   box-sizing: border-box;
   min-width: calc(100% - 30px);
   padding: 11px 15px 8px 15px;
-  height: 100%;
   background-color: #E4DFD9;
   font-family: 'Poppins', sans-serif;
 
@@ -51,18 +50,19 @@
         line-height: 30px;
         color: #522158;
         background-color: #E4DFD9;
-        border: none;
-        padding: 0;
+        border: 1px dashed #E4DFD9;
+        border-radius: 4px;
+        padding: 0 5px;
 
         &:focus {
           outline: none;
-          border-bottom: 1px dashed #522158;
+          border-color: #522158;
+          padding: 0 5px;
         }
       }
 
       img {
         cursor: pointer;
-        margin-left: 5px;
         max-height: 18px;
         opacity: 0.5;
         transition: .3s;
@@ -145,6 +145,7 @@
 
 
         }
+
         .tokenCount {
           margin-left: 10px;
           font-style: normal;
@@ -278,7 +279,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-fill-color: transparent;
           }
         }
 
@@ -308,7 +308,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-fill-color: transparent;
           }
         }
 

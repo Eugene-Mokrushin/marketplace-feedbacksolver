@@ -1,0 +1,225 @@
+.drawerClosed {
+  top: 54.5%;
+
+  .drawerRibon {
+    img {
+      transform: rotate(-90deg);
+    }
+  }
+}
+
+.absHidden {
+  top: 40%;
+
+  .drawerRibon {
+    img {
+      transform: rotate(-90deg);
+    }
+  }
+}
+
+.drawerOpen {
+  top: 100%;
+
+  .drawerRibon {
+    img {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.drawerWrapper {
+  position: absolute;
+  z-index: -1;
+  left: 46px;
+  width: calc(100% - 48px - 18px);
+  font-family: 'Poppins', sans-serif;
+  transition: top .2s;
+
+  .files {
+    background-color: #E4DFD9;
+    border: 2px solid #522158;
+    border-radius: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    padding: 10px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    max-height: 100px;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+    }
+
+    &::-webkit-scrollbar:vertical {
+      width: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      // border-radius: 10px;
+      background-color: #650e8d;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+
+    .file {
+      display: flex;
+      align-items: center;
+
+      &:hover {
+        .editFilename {
+          display: block;
+        }
+      }
+
+
+      .downloadFile {
+        cursor: pointer;
+        width: 20px;
+        transition: width .2s;
+        max-height: 20px !important;
+      }
+
+      .fileSelector {
+        cursor: pointer;
+        appearance: none;
+        position: relative;
+        height: 20px;
+        width: 20px;
+        aspect-ratio: 1/1 !important;
+        background: #E4DFD9;
+        border-radius: 3px;
+        border: 1px solid #522158;
+        transition: background .3s;
+
+        &:hover {
+          background: #5221588a;
+        }
+
+        &:checked {
+          background: #522158;
+        }
+
+        &:checked::before {
+          pointer-events: none;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 10px;
+          height: 10px;
+          display: flex;
+          color: #E4DFD9;
+          content: '✓';
+          font-size: 15px;
+          font-weight: bold;
+          position: absolute;
+          align-items: center;
+          justify-content: center;
+        }
+
+        &:checked::after {
+          animation: click-wave .5s;
+          background: #522158;
+          content: '';
+          display: block;
+          position: relative;
+          z-index: 1;
+          border-radius: 50%;
+        }
+      }
+
+
+      .name {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        color: #522157;
+        max-width: 200px;
+        display: flex;
+        align-items: center;
+
+        .fileExcel {
+          margin-left: 5px;
+          max-height: 16px;
+        }
+
+        .text {
+          user-select: none;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          margin-left: 2.5px;
+        }
+      }
+
+      .editFilename {
+        cursor: pointer;
+        display: none;
+        max-height: 16px;
+        margin-left: 5px;
+      }
+
+      .date {
+        width: 90px;
+        margin-left: auto;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 21px;
+        color: rgba(82, 33, 88, 0.67);
+      }
+
+      .deleteFile {
+        cursor: pointer;
+        margin-left: 10px;
+        width: 14px;
+        transition: width .2s;
+        max-height: 14px;
+      }
+    }
+  }
+
+  .drawerRibon {
+    user-select: none;
+    cursor: pointer;
+    position: absolute;
+    background-color: #522158;
+    width: fit-content;
+    height: 60px;
+    padding: 0 30px;
+    border-radius: 50%;
+    z-index: -2;
+    left: 93%;
+    transform: translate(-100%, -35px);
+
+    img {
+      margin-top: 31px;
+      max-height: 30px;
+      transition: transform .2s
+    }
+  }
+
+}
+
+@keyframes click-wave {
+  0% {
+    height: 10px;
+    width: 10px;
+    opacity: 0.35;
+    position: relative;
+  }
+
+  100% {
+    height: 60px;
+    width: 60px;
+    margin-left: -20px;
+    margin-top: -20px;
+    opacity: 0;
+  }
+}

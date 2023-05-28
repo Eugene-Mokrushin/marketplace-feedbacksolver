@@ -1,6 +1,6 @@
 .content {
   background-color: #E4DFD9;
-  padding: 13px 15px 8px 15px;
+  padding: 11px 15px 8px 15px;
   min-width: calc(100% - 30px);
   height: calc(100% - 19px);
   display: flex;
@@ -136,7 +136,8 @@
         white-space: nowrap;
         font-weight: 400;
         font-size: 16px;
-        transition: max-width .2s, color .2s;
+        padding-left: 0px;
+        transition: max-width .4s, color .4s, padding-left .2s;
         max-width: 0px;
       }
 
@@ -150,10 +151,10 @@
           text-overflow: ellipsis;
         }
 
-        .textEmail+.imgWrap {
-          padding-right: 14px;
-          padding-left: 5px;
-        }
+        // .textEmail+.imgWrap {
+        //   padding-right: 14px;
+        //   padding-left: 5px;
+        // }
       }
 
       .text {

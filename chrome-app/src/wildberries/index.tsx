@@ -7,7 +7,11 @@ import { useEffect, useRef, useState } from "react";
 import { UserAuth } from "../context/AuthContext";
 import Account from "./Account";
 
-const Wildberries = () => {
+interface WildberriesProps {
+  handleDrawer: (state: boolean | null) => void;
+}
+
+const Wildberries = ({ handleDrawer }: WildberriesProps) => {
   const elementsRef = useRef<HTMLDivElement>(null);
   const [action, setAction] = useState("unsigned");
   const { user } = UserAuth();
@@ -17,9 +21,6 @@ const Wildberries = () => {
       setAction("signed");
     } else {
       setAction("unsigned");
-    }
-    if (elementsRef.current) {
-      elementsRef.current.style.transform = "translateX(-100%)";
     }
   }, [user]);
 
@@ -39,17 +40,20 @@ const Wildberries = () => {
     if (elementsRef.current) {
       elementsRef.current.style.transform = "translate(0%, 0%)";
     }
+    handleDrawer(false);
   };
   const toAccount = () => {
     if (elementsRef.current) {
       elementsRef.current.style.transform = "translateX(-100%)";
     }
+    handleDrawer(null);
   };
 
   const loggedin = () => {
     if (elementsRef.current) {
       elementsRef.current.style.transform = "translateX(0%)";
     }
+    handleDrawer(false);
   };
 
   return (

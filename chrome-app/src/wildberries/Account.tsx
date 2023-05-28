@@ -2,19 +2,22 @@ import React, { useRef, useState } from "react";
 import "../styles/account.css";
 import arrowBack from "../assets/arrowBack.svg";
 import { UserAuth } from "../context/AuthContext";
+import { UserDB } from "../context/DBContext";
 import edit from "../assets/edit.svg";
 import plus from "../assets/plus.svg";
 import star from "../assets/star.png";
+import { User } from "firebase/auth";
 
 interface AccountProps {
   signedup: () => void;
 }
 
 function Account({ signedup }: AccountProps) {
-  const { logout, user } = UserAuth();
+  const { logout, user, changeUsername } = UserAuth();
   const userNameRef = useRef<HTMLDivElement>(null);
   const penRef = useRef<HTMLImageElement>(null);
   const [username, setUsername] = useState<string>("");
+  const [prevUsername, setPrevUsername] = useState<string>("");
 
   const handleSignOut = () => {
     logout();
@@ -22,9 +25,15 @@ function Account({ signedup }: AccountProps) {
   };
 
   const handleTypeName = (e: React.FormEvent<HTMLDivElement>) => {
-    if ((e.target as HTMLDivElement).innerText.length < 2) {
-      (e.target as HTMLDivElement).innerText = username;
-    } else if ((e.target as HTMLDivElement).innerText.length > 18) {
+    const enterKeyCode = 13;
+    if (
+      e.nativeEvent instanceof KeyboardEvent &&
+      (e.nativeEvent.key === "Enter" || e.nativeEvent.keyCode === enterKeyCode)
+    ) {
+      e.preventDefault();
+      (e.target as HTMLDivElement).blur();
+    }
+    if ((e.target as HTMLDivElement).innerText.length > 18) {
       (e.target as HTMLDivElement).innerText = username;
     } else {
       setUsername((e.target as HTMLDivElement).innerText);
@@ -33,6 +42,7 @@ function Account({ signedup }: AccountProps) {
 
   const handleChangeName = () => {
     if (userNameRef.current && penRef.current) {
+      setPrevUsername(userNameRef.current.innerText);
       userNameRef.current.contentEditable = "true";
       penRef.current.style.opacity = "1";
 
@@ -51,11 +61,27 @@ function Account({ signedup }: AccountProps) {
   const handleSaveChangeName = (
     e: React.FocusEvent<HTMLDivElement, Element>
   ) => {
+    if (userNameRef.current && userNameRef.current.innerText.length === 0) {
+      userNameRef.current.innerText = prevUsername;
+    }
     if (userNameRef.current && penRef.current) {
       userNameRef.current.contentEditable = "false";
       penRef.current.style.opacity = "0.5";
-      console.log(userNameRef.current.innerText);
+      if (user?.uid && user?.email) {
+        changeUsername(userNameRef.current.innerText);
+      }
     }
+  };
+
+  const getUserName = (user: User | null) => {
+    if (user) {
+      if (user.displayName) {
+        return user.displayName;
+      } else if (user.email) {
+        return user.email.split("@")[0];
+      }
+    }
+    return "";
   };
 
   return (
@@ -80,11 +106,11 @@ function Account({ signedup }: AccountProps) {
           <div
             className="name"
             onBlur={(e) => handleSaveChangeName(e)}
-            onInput={(e) => handleTypeName(e)}
+            onKeyDown={(e) => handleTypeName(e)}
             ref={userNameRef}
             contentEditable={false}
           >
-            {user ? user.email?.split("@")[0] : ""}
+            {getUserName(user)}
           </div>
           <img
             onClick={() => handleChangeName()}
