@@ -14,6 +14,7 @@ interface AccountProps {
 
 function Account({ signedup }: AccountProps) {
   const { logout, user, changeUsername } = UserAuth();
+  const { initalUserData } = UserDB();
   const userNameRef = useRef<HTMLDivElement>(null);
   const penRef = useRef<HTMLImageElement>(null);
   const [username, setUsername] = useState<string>("");
@@ -128,7 +129,7 @@ function Account({ signedup }: AccountProps) {
       <div className="main">
         <div className="stats">
           <div className="plan">
-            <span className="accountBold">Plan:</span> Basic
+            <span className="accountBold">Plan:</span> {initalUserData.plan}
           </div>
           <div className="tokenB">
             <span className="accountBold">Tokens Basic:</span>
@@ -141,7 +142,7 @@ function Account({ signedup }: AccountProps) {
                 }
                 alt="Add more basic tokens"
               />
-              <div className="tokenCount">94</div>
+              <div className="tokenCount">{initalUserData.tokenB}</div>
               <div className="symbol">🪨</div>
             </div>
           </div>
@@ -156,7 +157,7 @@ function Account({ signedup }: AccountProps) {
                 }
                 alt="Add more basic tokens"
               />
-              <div className="tokenCount">23</div>
+              <div className="tokenCount">{initalUserData.tokenP}</div>
               <div className="symbol">💎</div>
             </div>
           </div>

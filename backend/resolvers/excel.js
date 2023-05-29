@@ -34,7 +34,7 @@ export const uploadBasicExcel = async (req, res) => {
         data.push(rowData);
       }
     });
-
+    data.shift()
     res.json(data);
   }).catch(err => {
     console.log(err);

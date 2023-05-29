@@ -5,6 +5,9 @@ import edit from "./assets/edit.svg";
 import bin from "./assets/bin.svg";
 import arrowBackRevers from "./assets/arrowBackRevers.svg";
 import { uid } from "uid";
+import { UserDB } from "./context/DBContext";
+import { FileRef } from "./types";
+import { MouseEvent } from "react";
 
 interface DrawerProps {
   drawerOpen: boolean | null;
@@ -12,13 +15,7 @@ interface DrawerProps {
 }
 
 function Drawer({ drawerOpen, handleDrawer }: DrawerProps) {
-  const testFiles = [
-    { name: "Clothes fall", date: 1701616953000 },
-    { name: "Winter collection", date: 1642260153000 },
-    { name: "Super mega summer collection", date: 1685287353000 },
-    { name: "Clothes fall 2", date: 1646148153000 },
-    { name: "Clothes fall 4", date: 1626103353000 },
-  ];
+  const { initalUserData, changeFileName } = UserDB();
 
   let drawerState: string;
 
@@ -30,60 +27,61 @@ function Drawer({ drawerOpen, handleDrawer }: DrawerProps) {
     drawerState = "drawerClosed";
   }
 
-  const sortFilesByDate = (
-    files: { name: string; date: number }[]
-  ): { name: string; date: number }[] => {
-    return files.sort((a, b) => a.date - b.date);
+  // const sortFilesByDate = (files: FileRef[]) => {
+  //   return files.sort((a, b) => new Date(b.date) - new Date(a.date));
+  // };
+
+  const handleEditName = (
+    e: MouseEvent<HTMLImageElement, globalThis.MouseEvent>,
+    file: FileRef
+  ) => {
+    console.log(e);
   };
 
-  const files = sortFilesByDate(testFiles)
-    .reverse()
-    .map((file, index) => {
-      return (
-        <div className="file" key={uid(10)}>
+  const files = initalUserData.files.reverse().map((file, index) => {
+    return (
+      <div className="file" key={uid(10)}>
+        <img
+          src={
+            chrome.runtime
+              ? chrome.runtime.getURL("assets/download.svg")
+              : download
+          }
+          alt="Download File"
+          className="downloadFile"
+        />
+        <input
+          className="fileSelector"
+          type="radio"
+          name="fileSelect"
+          id={file.name + index}
+          defaultChecked={index === 0 ? true : false}
+        />
+        <label className="name" htmlFor={file.name + index}>
           <img
             src={
-              chrome.runtime
-                ? chrome.runtime.getURL("assets/download.svg")
-                : download
+              chrome.runtime ? chrome.runtime.getURL("assets/excel.png") : excel
             }
-            alt="Download File"
-            className="downloadFile"
+            alt="Excel file"
+            className="fileExcel"
           />
-          <input
-            className="fileSelector"
-            type="radio"
-            name="fileSelect"
-            id={file.name + index}
-          />
-          <label className="name" htmlFor={file.name + index}>
-            <img
-              src={
-                chrome.runtime
-                  ? chrome.runtime.getURL("assets/excel.png")
-                  : excel
-              }
-              alt="Excel file"
-              className="fileExcel"
-            />
-            <div className="text">{file.name}</div>
-          </label>
-          <img
-            src={
-              chrome.runtime ? chrome.runtime.getURL("assets/edit.svg") : edit
-            }
-            alt="edit"
-            className="editFilename"
-          />
-          <div className="date">{convertDate(file.date)}</div>
-          <img
-            src={chrome.runtime ? chrome.runtime.getURL("assets/bin.svg") : bin}
-            alt="delete file"
-            className="deleteFile"
-          />
-        </div>
-      );
-    });
+          <div className="text">{file.name}</div>
+        </label>
+        <img
+          src={chrome.runtime ? chrome.runtime.getURL("assets/edit.svg") : edit}
+          alt="edit"
+          className="editFilename"
+          onClick={(e) => handleEditName(e, file)}
+        />
+        <div className="date">{convertDate(file.date)}</div>
+        <img
+          src={chrome.runtime ? chrome.runtime.getURL("assets/bin.svg") : bin}
+          alt="delete file"
+          className="deleteFile"
+        />
+      </div>
+    );
+  });
 
   return (
     <div className={`drawerWrapper ${drawerState}`}>
@@ -103,7 +101,7 @@ function Drawer({ drawerOpen, handleDrawer }: DrawerProps) {
   );
 }
 
-function convertDate(timestamp: number) {
+function convertDate(timestamp: string) {
   const date = new Date(timestamp);
 
   const day = String(date.getDate()).padStart(2, "0");

@@ -18,7 +18,9 @@ const Wildberries = ({ handleDrawer }: WildberriesProps) => {
 
   useEffect(() => {
     if (user) {
-      setAction("signed");
+      setTimeout(() => {
+        setAction("signed");
+      }, 500);
     } else {
       setAction("unsigned");
     }

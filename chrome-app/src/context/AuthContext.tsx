@@ -68,8 +68,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const signIn = useCallback(
     async (email: string, password: string) => {
       await signInWithEmailAndPassword(auth, email, password);
-      console.log(user?.displayName);
-      console.log(auth.currentUser);
       if (user?.displayName) {
         setUsername(user?.displayName);
       } else if (auth.currentUser?.email) {

@@ -1,8 +1,11 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { UserAuth } from "../context/AuthContext";
+import { UserStorage } from "../context/StorageContext";
+import { UserDB } from "../context/DBContext";
 import person from "../assets/person.svg";
 import excel from "../assets/excel.png";
 import "../styles/content.css";
+import { uid } from "uid";
 
 interface MainProps {
   toAccount: () => void;
@@ -16,6 +19,8 @@ function Main({ toAccount }: MainProps) {
     { label: "Only 5-star feedback", value: true, key: "5" },
   ]);
   const { user, username } = UserAuth();
+  const { uploadFileToStorage } = UserStorage();
+  const { uploadFileData } = UserDB();
 
   const mainButtonRef = useRef<HTMLInputElement>(null);
   const [globalFile, setGlobalFile] = useState([]);
@@ -72,11 +77,14 @@ function Main({ toAccount }: MainProps) {
   const uploadTemplate = async (
     e: ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
-    if (e.target.files) {
+    if (e.target.files && user) {
       try {
         const file = e.target.files[0];
+        e.target.value = "";
         const formData = new FormData();
         formData.append("file", file, file.name);
+
+        const fileUID = uid();
         const globalFile = await fetch(
           "http://localhost:2001/excel/upload/basic",
           {
@@ -84,6 +92,10 @@ function Main({ toAccount }: MainProps) {
             body: formData,
           }
         ).then((res) => res.json());
+        if (user) {
+          await uploadFileToStorage(file.name, fileUID, file, user);
+          await uploadFileData(fileUID, globalFile);
+        }
         setGlobalFile(globalFile);
       } catch (error) {
         console.log(error);
@@ -179,6 +191,7 @@ function Main({ toAccount }: MainProps) {
               className="inputExcel"
               name="excelUpload"
               id="excelUpload"
+              accept=".xlsx"
               onChange={(e) => uploadTemplate(e)}
             />
             <img
