@@ -10,6 +10,8 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  -webkit-box-sizing: unset !important;
+          box-sizing: unset !important;
 }
 .content .header {
   display: -webkit-box;

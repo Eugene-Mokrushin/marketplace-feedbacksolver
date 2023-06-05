@@ -12,3 +12,13 @@ export interface FileRef {
   fileId: string;
   date: string;
 }
+
+export interface TemplateItem {
+  articleWB?: string;
+  brand?: string;
+  rating?: string;
+  response?: string[];
+  triggers?: string[];
+  blacklistResponse?: string;
+  recommendation?: string[];
+}

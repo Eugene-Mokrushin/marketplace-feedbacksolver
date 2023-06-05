@@ -1,17 +1,18 @@
 import {
   createContext,
   ReactNode,
+  SetStateAction,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
+  Dispatch,
 } from "react";
-import { ref, set, child, get, onValue, getDatabase } from "firebase/database";
+import { ref, set, get, onValue } from "firebase/database";
 import { db } from "../firebase";
 import { UserAuth } from "./AuthContext";
-import { FileRef, InitalUserData } from "../types";
-import { User } from "firebase/auth";
+import { FileRef, InitalUserData, TemplateItem } from "../types";
 
 interface DBContextProps {
   changeUsername: (
@@ -26,12 +27,18 @@ interface DBContextProps {
     fileId: string,
     newName: string
   ) => Promise<unknown>;
+  getFileData: (fileId: string) => Promise<unknown>;
+  globalFile: TemplateItem[];
+  setGlobalFile: Dispatch<SetStateAction<TemplateItem[]>>;
+  selectedFile: string | null;
+  setSelectedFile: Dispatch<SetStateAction<string>>;
 }
 
 export const DBContext = createContext<DBContextProps>({
   changeUsername: () => Promise.resolve(),
   uploadFileData: () => Promise.resolve(),
   changeFileName: () => Promise.resolve(),
+  getFileData: () => Promise.resolve(),
   initalUserData: {
     email: "",
     name: "",
@@ -40,6 +47,10 @@ export const DBContext = createContext<DBContextProps>({
     plan: "Basic",
     files: [],
   },
+  globalFile: [],
+  setGlobalFile: () => {},
+  selectedFile: "" || null,
+  setSelectedFile: () => {},
 });
 
 export const DBContextProvider = ({ children }: { children: ReactNode }) => {
@@ -51,6 +62,8 @@ export const DBContextProvider = ({ children }: { children: ReactNode }) => {
     plan: "Basic",
     files: [],
   });
+  const [globalFile, setGlobalFile] = useState<TemplateItem[]>([]);
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const { user } = UserAuth();
   const changeUsername = useCallback(
     async (userId: string, name: string, email: string) => {
@@ -110,9 +123,48 @@ export const DBContextProvider = ({ children }: { children: ReactNode }) => {
     []
   );
 
+  const getFileData = useCallback(
+    async (fileId: string) => {
+      try {
+        if (user && selectedFile) {
+          const fileRef = ref(db, "files/" + selectedFile);
+          const fileData: TemplateItem[] = await get(fileRef).then(
+            (snapshot) => {
+              return snapshot.val().data;
+            }
+          );
+          setGlobalFile([...fileData]);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [selectedFile, user]
+  );
+
   const contextValue = useMemo(
-    () => ({ changeUsername, uploadFileData, initalUserData, changeFileName }),
-    [changeUsername, uploadFileData, initalUserData, changeFileName]
+    () => ({
+      changeUsername,
+      uploadFileData,
+      initalUserData,
+      changeFileName,
+      getFileData,
+      globalFile,
+      setGlobalFile,
+      selectedFile,
+      setSelectedFile,
+    }),
+    [
+      changeUsername,
+      uploadFileData,
+      initalUserData,
+      changeFileName,
+      getFileData,
+      globalFile,
+      setGlobalFile,
+      selectedFile,
+      setSelectedFile,
+    ]
   );
 
   return (

@@ -1,5 +1,5 @@
 .drawerClosed {
-  top: 54.5%;
+  top: 63.1%;
 
   .drawerRibon {
     img {
@@ -45,8 +45,9 @@
     padding: 10px 10px;
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.7rem;
     max-height: 100px;
+    min-height: 100px;
     overflow: auto;
 
     &::-webkit-scrollbar {
@@ -139,8 +140,8 @@
         font-weight: 400;
         font-size: 16px;
         line-height: 24px;
-        color: #522157;
-        max-width: 200px;
+        color: #522158;
+        max-width: 220px;
         display: flex;
         align-items: center;
 
@@ -150,11 +151,25 @@
         }
 
         .text {
+          cursor: context-menu;
           user-select: none;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 24px;
+          color: #522158;
           margin-left: 2.5px;
+          padding: 0 2.5px;
+          background-color: #E4DFD9;
+          border: 1px solid #E4DFD9;
+
+          &:focus {
+            outline: none;
+            border-radius: 3px;
+            border: 1px dashed #522158;
+          }
         }
       }
 

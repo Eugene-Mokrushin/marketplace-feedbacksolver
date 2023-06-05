@@ -194,7 +194,7 @@ function Account({ signedup }: AccountProps) {
                 <img
                   src={
                     chrome.runtime
-                      ? chrome.runtime.getURL("assets/arrowBack.svg")
+                      ? chrome.runtime.getURL("assets/star.png")
                       : star
                   }
                   alt="Go back"

@@ -11,6 +11,11 @@
   font-style: normal;
   src: url("chrome-extension://__MSG_@@extension_id__/fonts/Poppins-Medium.ttf") format("truetype");
 }
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
 #feedbackSolver {
   margin: 0;
   padding: 0;

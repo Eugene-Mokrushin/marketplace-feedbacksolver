@@ -1,6 +1,6 @@
 import Wildberries from "./wildberries/index";
 import "./styles/global.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import close from "./assets/close.svg";
 import { AuthContextProvider } from "./context/AuthContext";
 import { DBContextProvider } from "./context/DBContext";
@@ -8,8 +8,6 @@ import { StorageContextProvider } from "./context/StorageContext";
 import Drawer from "./Drawer";
 
 function App() {
-  useEffect(() => {}, []);
-
   const [drawrOpen, setDrawOpen] = useState<boolean | null>(false);
 
   const handleClose = () => {
@@ -19,8 +17,14 @@ function App() {
     }
   };
 
+  const [selectedFile, setSelectedFile] = useState("");
+
   const handleDrawer = (state: boolean | null) => {
     setDrawOpen(state);
+  };
+
+  const handleSelectFile = (fileId: string) => {
+    setSelectedFile(fileId);
   };
 
   return (
@@ -39,7 +43,12 @@ function App() {
               />
             </div>
             <Wildberries handleDrawer={handleDrawer} />
-            <Drawer drawerOpen={drawrOpen} handleDrawer={handleDrawer} />
+            <Drawer
+              drawerOpen={drawrOpen}
+              handleDrawer={handleDrawer}
+              handleSelectFile={handleSelectFile}
+              selectedFile={selectedFile}
+            />
           </StorageContextProvider>
         </DBContextProvider>
       </AuthContextProvider>

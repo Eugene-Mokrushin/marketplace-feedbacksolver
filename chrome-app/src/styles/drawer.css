@@ -1,6 +1,6 @@
 @charset "UTF-8";
 .drawerClosed {
-  top: 54.5%;
+  top: 63.1%;
 }
 .drawerClosed .drawerRibon img {
   -webkit-transform: rotate(-90deg);
@@ -46,8 +46,9 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.7rem;
   max-height: 100px;
+  min-height: 100px;
   overflow: auto;
 }
 .drawerWrapper .files::-webkit-scrollbar {
@@ -139,8 +140,8 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  color: #522157;
-  max-width: 200px;
+  color: #522158;
+  max-width: 220px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -153,6 +154,7 @@
   max-height: 16px;
 }
 .drawerWrapper .files .file .name .text {
+  cursor: context-menu;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -160,7 +162,19 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #522158;
   margin-left: 2.5px;
+  padding: 0 2.5px;
+  background-color: #E4DFD9;
+  border: 1px solid #E4DFD9;
+}
+.drawerWrapper .files .file .name .text:focus {
+  outline: none;
+  border-radius: 3px;
+  border: 1px dashed #522158;
 }
 .drawerWrapper .files .file .editFilename {
   cursor: pointer;

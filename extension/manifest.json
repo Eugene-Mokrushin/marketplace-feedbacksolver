@@ -4,7 +4,7 @@
   "manifest_version": 3,
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["https://seller.wildberries.ru/feedback-question/feedbacks/not-answered-feedbacks*"],
       "css": ["styles.css"],
       "run_at": "document_start"
     }
@@ -28,7 +28,17 @@
   },
   "background": {
     "service_worker": "background.js",
-    "type": "module"
+    "type": "module",
+    "matches": [
+      "https://seller.wildberries.ru/feedback-question/feedbacks/not-answered-feedbacks*"
+    ]
   },
-  "permissions": ["scripting", "activeTab", "identity"]
+  "permissions": [
+    "scripting",
+    "activeTab",
+    "tabs",
+    "identity",
+    "webRequest",
+    "management"
+  ]
 }

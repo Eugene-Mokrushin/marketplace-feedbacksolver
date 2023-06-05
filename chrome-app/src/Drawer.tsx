@@ -6,16 +6,26 @@ import bin from "./assets/bin.svg";
 import arrowBackRevers from "./assets/arrowBackRevers.svg";
 import { uid } from "uid";
 import { UserDB } from "./context/DBContext";
+import { UserAuth } from "./context/AuthContext";
 import { FileRef } from "./types";
-import { MouseEvent } from "react";
+import { FocusEvent, MouseEvent, useState } from "react";
 
 interface DrawerProps {
   drawerOpen: boolean | null;
   handleDrawer: (state: boolean | null) => void;
+  handleSelectFile: (fileId: string) => void;
+  selectedFile: string;
 }
 
-function Drawer({ drawerOpen, handleDrawer }: DrawerProps) {
+function Drawer({
+  drawerOpen,
+  handleDrawer,
+  handleSelectFile,
+  selectedFile,
+}: DrawerProps) {
   const { initalUserData, changeFileName } = UserDB();
+  const { user } = UserAuth();
+  const [prevFileName, setPrevFileName] = useState("");
 
   let drawerState: string;
 
@@ -32,56 +42,130 @@ function Drawer({ drawerOpen, handleDrawer }: DrawerProps) {
   // };
 
   const handleEditName = (
-    e: MouseEvent<HTMLImageElement, globalThis.MouseEvent>,
+    e: MouseEvent<HTMLImageElement, globalThis.MouseEvent>
+  ) => {
+    const filename = e.currentTarget.parentElement?.querySelector(
+      ".text"
+    ) as HTMLElement;
+    if (filename) {
+      setPrevFileName(filename.innerText);
+      filename.contentEditable = "true";
+      const range = document.createRange();
+      const selection = window.getSelection();
+      range.selectNodeContents(filename);
+      range.collapse(false);
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(range);
+        filename.focus();
+      }
+    }
+  };
+  const handleChengeFileName = (
+    e: FocusEvent<HTMLDivElement, Element>,
     file: FileRef
   ) => {
-    console.log(e);
+    e.target.contentEditable = "false";
+    if (e.target.innerText.length === 0) {
+      e.target.innerText = prevFileName;
+    } else {
+      if (user?.uid) {
+        changeFileName(user.uid, file.fileId, e.target.innerText);
+      }
+    }
+  };
+  const handlePreventEnter = (
+    e: React.FormEvent<HTMLDivElement>,
+    file: FileRef
+  ) => {
+    const enterKeyCode = 13;
+    if (
+      e.nativeEvent instanceof KeyboardEvent &&
+      (e.nativeEvent.key === "Enter" || e.nativeEvent.keyCode === enterKeyCode)
+    ) {
+      e.preventDefault();
+      (e.target as HTMLDivElement).contentEditable = "false";
+      (e.target as HTMLDivElement).blur();
+      if ((e.target as HTMLDivElement).innerText.length === 0) {
+        (e.target as HTMLDivElement).innerText = prevFileName;
+      } else {
+        if (user?.uid) {
+          changeFileName(
+            user.uid,
+            file.fileId,
+            (e.target as HTMLDivElement).innerText
+          );
+        }
+      }
+    }
   };
 
-  const files = initalUserData.files.reverse().map((file, index) => {
-    return (
-      <div className="file" key={uid(10)}>
-        <img
-          src={
-            chrome.runtime
-              ? chrome.runtime.getURL("assets/download.svg")
-              : download
-          }
-          alt="Download File"
-          className="downloadFile"
-        />
-        <input
-          className="fileSelector"
-          type="radio"
-          name="fileSelect"
-          id={file.name + index}
-          defaultChecked={index === 0 ? true : false}
-        />
-        <label className="name" htmlFor={file.name + index}>
-          <img
-            src={
-              chrome.runtime ? chrome.runtime.getURL("assets/excel.png") : excel
-            }
-            alt="Excel file"
-            className="fileExcel"
-          />
-          <div className="text">{file.name}</div>
-        </label>
-        <img
-          src={chrome.runtime ? chrome.runtime.getURL("assets/edit.svg") : edit}
-          alt="edit"
-          className="editFilename"
-          onClick={(e) => handleEditName(e, file)}
-        />
-        <div className="date">{convertDate(file.date)}</div>
-        <img
-          src={chrome.runtime ? chrome.runtime.getURL("assets/bin.svg") : bin}
-          alt="delete file"
-          className="deleteFile"
-        />
-      </div>
-    );
-  });
+  const handleRadio = (id: string) => {
+    handleSelectFile(id);
+  };
+
+  const files = initalUserData?.files
+    ? [...initalUserData.files].reverse().map((file, index) => {
+        return (
+          <div
+            className="file"
+            key={uid(10)}
+            onChange={() => handleRadio(file.fileId)}
+          >
+            <img
+              src={
+                chrome.runtime
+                  ? chrome.runtime.getURL("assets/download.svg")
+                  : download
+              }
+              alt="Download File"
+              className="downloadFile"
+            />
+            <input
+              className="fileSelector"
+              type="radio"
+              name="fileSelect"
+              id={file.name + index}
+              defaultChecked={selectedFile === file.fileId ? true : false}
+            />
+            <label className="name" htmlFor={file.name + index}>
+              <img
+                src={
+                  chrome.runtime
+                    ? chrome.runtime.getURL("assets/excel.png")
+                    : excel
+                }
+                alt="Excel file"
+                className="fileExcel"
+              />
+              <div
+                className="text"
+                onBlur={(e) => handleChengeFileName(e, file)}
+                onKeyDown={(e) => handlePreventEnter(e, file)}
+              >
+                {file.name}
+              </div>
+            </label>
+            <img
+              src={
+                chrome.runtime ? chrome.runtime.getURL("assets/edit.svg") : edit
+              }
+              alt="edit"
+              className="editFilename"
+              onClick={(e) => handleEditName(e)}
+            />
+            <div className="date">{convertDate(file.date)}</div>
+            <img
+              src={
+                chrome.runtime ? chrome.runtime.getURL("assets/bin.svg") : bin
+              }
+              alt="delete file"
+              className="deleteFile"
+            />
+          </div>
+        );
+      })
+    : [];
 
   return (
     <div className={`drawerWrapper ${drawerState}`}>

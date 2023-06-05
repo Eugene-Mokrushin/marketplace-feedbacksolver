@@ -6,6 +6,7 @@ import person from "../assets/person.svg";
 import excel from "../assets/excel.png";
 import "../styles/content.css";
 import { uid } from "uid";
+import { runWildberriesBasic } from "../scripts/wildberriesBasic";
 
 interface MainProps {
   toAccount: () => void;
@@ -20,10 +21,9 @@ function Main({ toAccount }: MainProps) {
   ]);
   const { user, username } = UserAuth();
   const { uploadFileToStorage } = UserStorage();
-  const { uploadFileData } = UserDB();
+  const { uploadFileData, globalFile, setGlobalFile } = UserDB();
 
   const mainButtonRef = useRef<HTMLInputElement>(null);
-  const [globalFile, setGlobalFile] = useState([]);
 
   const setSwitch = (key: string) => {
     setSwitchesValues((prev) => {
@@ -35,7 +35,6 @@ function Main({ toAccount }: MainProps) {
           };
         } else return element;
       });
-
       return elements;
     });
   };
@@ -85,7 +84,7 @@ function Main({ toAccount }: MainProps) {
         formData.append("file", file, file.name);
 
         const fileUID = uid();
-        const globalFile = await fetch(
+        const globalFile: any = await fetch(
           "http://localhost:2001/excel/upload/basic",
           {
             method: "POST",
@@ -105,10 +104,29 @@ function Main({ toAccount }: MainProps) {
 
   // @ts-ignore
   const runScript = (e) => {
-    console.log(globalFile);
     if (mainButtonRef.current) {
       const isPaused = mainButtonRef.current.checked;
-      console.log(isPaused);
+      const config = {
+        confirmation:
+          switchesValues.find((switchValue) => switchValue.key === "conf")
+            ?.value ?? false,
+        autofill:
+          switchesValues.find((switchValue) => switchValue.key === "autofill")
+            ?.value ?? false,
+        paginate:
+          switchesValues.find((switchValue) => switchValue.key === "paginte")
+            ?.value ?? false,
+        onlyTop:
+          switchesValues.find((switchValue) => switchValue.key === "5")
+            ?.value ?? false,
+      };
+      if (!isPaused) {
+        if (user) {
+          // runWildberriesBasic(config, globalFile);
+        } else {
+          runWildberriesBasic(config, globalFile);
+        }
+      }
     }
   };
 

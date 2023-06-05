@@ -5,6 +5,7 @@
   height: calc(100% - 19px);
   display: flex;
   flex-direction: column;
+  box-sizing: unset !important;
 
   .header {
     display: flex;
