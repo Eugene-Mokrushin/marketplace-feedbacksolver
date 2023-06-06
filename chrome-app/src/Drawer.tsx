@@ -13,17 +13,15 @@ import { FocusEvent, MouseEvent, useState } from "react";
 interface DrawerProps {
   drawerOpen: boolean | null;
   handleDrawer: (state: boolean | null) => void;
-  handleSelectFile: (fileId: string) => void;
-  selectedFile: string;
 }
 
-function Drawer({
-  drawerOpen,
-  handleDrawer,
-  handleSelectFile,
-  selectedFile,
-}: DrawerProps) {
-  const { initalUserData, changeFileName } = UserDB();
+function Drawer({ drawerOpen, handleDrawer }: DrawerProps) {
+  const {
+    initalUserData,
+    changeFileName,
+    setSelectedFile,
+    selectedFile,
+  } = UserDB();
   const { user } = UserAuth();
   const [prevFileName, setPrevFileName] = useState("");
 
@@ -36,10 +34,6 @@ function Drawer({
   } else {
     drawerState = "drawerClosed";
   }
-
-  // const sortFilesByDate = (files: FileRef[]) => {
-  //   return files.sort((a, b) => new Date(b.date) - new Date(a.date));
-  // };
 
   const handleEditName = (
     e: MouseEvent<HTMLImageElement, globalThis.MouseEvent>
@@ -100,8 +94,8 @@ function Drawer({
     }
   };
 
-  const handleRadio = (id: string) => {
-    handleSelectFile(id);
+  const handleRadio = (fileId: string) => {
+    setSelectedFile(fileId);
   };
 
   const files = initalUserData?.files

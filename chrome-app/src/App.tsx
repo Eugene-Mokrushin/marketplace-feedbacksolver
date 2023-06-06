@@ -17,14 +17,8 @@ function App() {
     }
   };
 
-  const [selectedFile, setSelectedFile] = useState("");
-
   const handleDrawer = (state: boolean | null) => {
     setDrawOpen(state);
-  };
-
-  const handleSelectFile = (fileId: string) => {
-    setSelectedFile(fileId);
   };
 
   return (
@@ -46,8 +40,6 @@ function App() {
             <Drawer
               drawerOpen={drawrOpen}
               handleDrawer={handleDrawer}
-              handleSelectFile={handleSelectFile}
-              selectedFile={selectedFile}
             />
           </StorageContextProvider>
         </DBContextProvider>

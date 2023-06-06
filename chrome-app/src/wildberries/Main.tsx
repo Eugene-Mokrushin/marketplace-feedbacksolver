@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, MouseEvent, useRef, useState } from "react";
 import { UserAuth } from "../context/AuthContext";
 import { UserStorage } from "../context/StorageContext";
 import { UserDB } from "../context/DBContext";
@@ -7,6 +7,7 @@ import excel from "../assets/excel.png";
 import "../styles/content.css";
 import { uid } from "uid";
 import { runWildberriesBasic } from "../scripts/wildberriesBasic";
+import { WbRunBasicConfig as Config, TemplateItem } from "../types";
 
 interface MainProps {
   toAccount: () => void;
@@ -21,7 +22,13 @@ function Main({ toAccount }: MainProps) {
   ]);
   const { user, username } = UserAuth();
   const { uploadFileToStorage } = UserStorage();
-  const { uploadFileData, globalFile, setGlobalFile } = UserDB();
+  const {
+    uploadFileData,
+    globalFile,
+    setGlobalFile,
+    selectedFile,
+    getFileData,
+  } = UserDB();
 
   const mainButtonRef = useRef<HTMLInputElement>(null);
 
@@ -102,31 +109,89 @@ function Main({ toAccount }: MainProps) {
     }
   };
 
-  // @ts-ignore
-  const runScript = (e) => {
-    if (mainButtonRef.current) {
-      const isPaused = mainButtonRef.current.checked;
-      const config = {
-        confirmation:
-          switchesValues.find((switchValue) => switchValue.key === "conf")
-            ?.value ?? false,
-        autofill:
-          switchesValues.find((switchValue) => switchValue.key === "autofill")
-            ?.value ?? false,
-        paginate:
-          switchesValues.find((switchValue) => switchValue.key === "paginte")
-            ?.value ?? false,
-        onlyTop:
-          switchesValues.find((switchValue) => switchValue.key === "5")
-            ?.value ?? false,
-      };
-      if (!isPaused) {
-        if (user) {
-          // runWildberriesBasic(config, globalFile);
-        } else {
-          runWildberriesBasic(config, globalFile);
-        }
+  const runScript = async (
+    e:
+      | MouseEvent<HTMLLabelElement, MouseEvent<Element, globalThis.MouseEvent>>
+      | MouseEvent<HTMLLabelElement, globalThis.MouseEvent>
+  ): Promise<void> => {
+    if (!mainButtonRef.current) {
+      return;
+    }
+
+    const isPaused = mainButtonRef.current.checked;
+    const config = getConfig();
+
+    if (isPaused) {
+      return;
+    }
+
+    if (user) {
+      await handleUser(config, e);
+    } else {
+      handleNonUser(config, e);
+    }
+  };
+
+  const getConfig = (): Config => {
+    const config: Config = {
+      confirmation: getValueByKey("conf"),
+      autofill: getValueByKey("autofill"),
+      paginate: getValueByKey("paginte"),
+      onlyTop: getValueByKey("5"),
+    };
+
+    return config;
+  };
+
+  const getValueByKey = (key: string): boolean => {
+    const switchValue = switchesValues.find((value) => value.key === key);
+    return switchValue?.value ?? false;
+  };
+
+  const handleUser = async (
+    config: Config,
+    e:
+      | MouseEvent<HTMLLabelElement, MouseEvent<Element, globalThis.MouseEvent>>
+      | MouseEvent<HTMLLabelElement, globalThis.MouseEvent>
+  ): Promise<void> => {
+    if (!mainButtonRef.current) {
+      return;
+    }
+    if (selectedFile) {
+      const fileData = (await getFileData(selectedFile)) as
+        | TemplateItem[]
+        | null;
+      if (fileData) {
+        runWildberriesBasic(fileData, config);
+      } else {
+        // TODO: warn user that this file doesnt exist
+        e.preventDefault();
+        mainButtonRef.current.checked = false;
+        alert("File doesnt exist!");
       }
+    } else {
+      e.preventDefault();
+      // TODO: show user that file has to be selected
+      alert("File not selected!");
+      mainButtonRef.current.checked = false;
+    }
+  };
+
+  const handleNonUser = (
+    config: Config,
+    e:
+      | MouseEvent<HTMLLabelElement, MouseEvent<Element, globalThis.MouseEvent>>
+      | MouseEvent<HTMLLabelElement, globalThis.MouseEvent>
+  ): void => {
+    if (!mainButtonRef.current) {
+      return;
+    }
+    if (globalFile.length > 0) {
+      runWildberriesBasic(globalFile, config);
+    } else {
+      e.preventDefault();
+      mainButtonRef.current.checked = false;
+      // TODO: CSS to show not logged-in user no files to use
     }
   };
 
@@ -172,7 +237,6 @@ function Main({ toAccount }: MainProps) {
           <label
             className="buttonStart"
             htmlFor="startButton"
-            // @ts-ignore
             onClick={(e) => runScript(e)}
           >
             <svg

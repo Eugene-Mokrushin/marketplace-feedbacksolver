@@ -1,28 +1,32 @@
-import { TemplateItem } from "../types";
+import { TemplateItem, WbRunBasicConfig as Config } from "../types";
 
-interface Config {
-  confirmation: boolean;
-  autofill: boolean;
-  paginate: boolean;
-  onlyTop: boolean;
-  personalizes?: boolean;
+interface BrandsImage {
+  [key: string]: TemplateItem[];
 }
+interface ArticlesImage {
+  [key: string]: TemplateItem[];
+}
+
 export const runWildberriesBasic = (
-  config?: Config,
-  template?: TemplateItem[]
+  template: TemplateItem[],
+  config?: Config
 ) => {
+  const { groupByBrand, groupByArticle } = groupByProperties(template);
+
   const mainFeedbackClass = ".FeedbacksCardsView__list";
   const allFeedbacksOnPage = document.querySelector(mainFeedbackClass);
   const feedbacksList = allFeedbacksOnPage?.querySelectorAll(
     mainFeedbackClass + "-item"
   );
   feedbacksList?.forEach((feedback) => {
+    feedback.scrollIntoView({ block: "center" });
     const productNameElement = feedback.querySelector(
       '[class*="ProductInfo__name__"]'
     );
-    const productName = productNameElement
-      ? productNameElement.textContent?.split(" ")
-      : [""];
+
+    const productName: string[] = productNameElement?.textContent
+      ? productNameElement.textContent.split(" ").map((w) => w.toLowerCase())
+      : [];
 
     const feedbackContentElement = feedback.querySelector(
       '[class*="ProductInfo__content__"]'
@@ -57,10 +61,11 @@ export const runWildberriesBasic = (
       buttonToOpen.click();
     }
     const textareaFiled = feedback.querySelector("textarea");
-    // if (ratingCount === 5 && productName?.includes())
+    const foundByArticle = codeWB ? groupByArticle[codeWB] : null;
+    const foundByBrand = getTemplateByBrand(groupByBrand, productName);
     feedback.classList.add("done");
   });
-  console.log(template);
+
   console.log("DONE");
 };
 
@@ -99,4 +104,37 @@ function transformRating(input: string) {
   }
 
   return result;
+}
+
+function groupByProperties(items: TemplateItem[]): {
+  groupByBrand: BrandsImage;
+  groupByArticle: ArticlesImage;
+} {
+  const groupByBrand: BrandsImage = {};
+  const groupByArticle: ArticlesImage = {};
+
+  for (const item of items) {
+    if (item.brand && !groupByBrand[item.brand]) {
+      groupByBrand[item.brand.toLocaleLowerCase()] = [];
+    }
+
+    if (item.articleWB && !groupByArticle[item.articleWB]) {
+      groupByArticle[item.articleWB.toLocaleLowerCase()] = [];
+    }
+
+    if (item.brand) groupByBrand[item.brand].push(item);
+    if (item.articleWB) groupByArticle[item.articleWB].push(item);
+  }
+
+  return { groupByBrand, groupByArticle };
+}
+
+function getTemplateByBrand(obj: BrandsImage, words: string[]) {
+  for (const word of words) {
+    if (word in obj) {
+      return obj[word];
+    }
+  }
+
+  return null;
 }

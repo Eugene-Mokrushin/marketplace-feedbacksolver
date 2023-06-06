@@ -31,7 +31,7 @@ interface DBContextProps {
   globalFile: TemplateItem[];
   setGlobalFile: Dispatch<SetStateAction<TemplateItem[]>>;
   selectedFile: string | null;
-  setSelectedFile: Dispatch<SetStateAction<string>>;
+  setSelectedFile: Dispatch<SetStateAction<string | null>>;
 }
 
 export const DBContext = createContext<DBContextProps>({
@@ -64,6 +64,9 @@ export const DBContextProvider = ({ children }: { children: ReactNode }) => {
   });
   const [globalFile, setGlobalFile] = useState<TemplateItem[]>([]);
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const [recentlyRunnedFile, setRecentlyRunnedFile] = useState<string | null>(
+    null
+  );
   const { user } = UserAuth();
   const changeUsername = useCallback(
     async (userId: string, name: string, email: string) => {
@@ -126,20 +129,26 @@ export const DBContextProvider = ({ children }: { children: ReactNode }) => {
   const getFileData = useCallback(
     async (fileId: string) => {
       try {
-        if (user && selectedFile) {
-          const fileRef = ref(db, "files/" + selectedFile);
-          const fileData: TemplateItem[] = await get(fileRef).then(
-            (snapshot) => {
-              return snapshot.val().data;
-            }
-          );
-          setGlobalFile([...fileData]);
+        if (recentlyRunnedFile !== fileId) {
+          if (user && fileId) {
+            const fileRef = ref(db, "files/" + fileId);
+            const fileData: TemplateItem[] = await get(fileRef).then(
+              (snapshot) => {
+                return snapshot.val().data;
+              }
+            );
+            setGlobalFile([...fileData]);
+            setRecentlyRunnedFile(fileId);
+            return fileData;
+          }
+        } else {
+          return globalFile;
         }
       } catch (error) {
         console.log(error);
       }
     },
-    [selectedFile, user]
+    [globalFile, recentlyRunnedFile, user]
   );
 
   const contextValue = useMemo(

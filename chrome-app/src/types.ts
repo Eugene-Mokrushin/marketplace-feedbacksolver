@@ -22,3 +22,11 @@ export interface TemplateItem {
   blacklistResponse?: string;
   recommendation?: string[];
 }
+
+export interface WbRunBasicConfig {
+  confirmation: boolean;
+  autofill: boolean;
+  paginate: boolean;
+  onlyTop: boolean;
+  personalizes?: boolean;
+}
