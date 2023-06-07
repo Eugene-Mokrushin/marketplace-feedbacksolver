@@ -1538,6 +1538,7 @@
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 #feedbackSolver {
@@ -1584,7 +1585,7 @@
 }
 @charset "UTF-8";
 .drawerClosed {
-  top: 63.1%;
+  top: 53.9%;
 }
 .drawerClosed .drawerRibon img {
   -webkit-transform: rotate(-90deg);
@@ -1631,8 +1632,8 @@
       -ms-flex-direction: column;
           flex-direction: column;
   gap: 0.7rem;
-  max-height: 100px;
-  min-height: 100px;
+  max-height: 125px;
+  min-height: 125px;
   overflow: auto;
 }
 .drawerWrapper .files::-webkit-scrollbar {

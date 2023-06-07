@@ -60,12 +60,143 @@ export const runWildberriesBasic = (
     if (buttonToOpen) {
       buttonToOpen.click();
     }
-    const textareaFiled = feedback.querySelector("textarea");
+    const textarea = feedback.querySelector("textarea");
     const foundByArticle = codeWB ? groupByArticle[codeWB] : null;
+    let general = null;
+    let match = null;
+    if (foundByArticle) {
+      foundByArticle.forEach((template_item) => {
+        const isTriggered = checkForBlackList(
+          template_item.triggers,
+          feedbackContent
+        );
+        if (template_item.rating) {
+          const ratingTransformed = transformRating(
+            template_item.rating
+          ).includes(ratingCount);
+          if (ratingTransformed) {
+            if (isTriggered) {
+              match = template_item.blacklistResponse;
+            } else if (template_item.response) {
+              const randomIndex = Math.floor(
+                Math.random() * template_item.response.length
+              );
+              const selectedResponse = template_item.response[randomIndex];
+              match = handleRecommendations(
+                selectedResponse,
+                template_item.recommendation
+              );
+            } else {
+              if (template_item.response) {
+                const randomIndex = Math.floor(
+                  Math.random() * (template_item.response as []).length
+                );
+                match = template_item.response[randomIndex];
+              } else {
+                match = null;
+              }
+            }
+          } else {
+            match = null;
+          }
+        } else {
+          if (template_item.recommendation) {
+            if (isTriggered) {
+              general = template_item.blacklistResponse;
+            } else if (template_item.recommendation) {
+              const randomIndex = Math.floor(
+                Math.random() * template_item.recommendation.length
+              );
+              const selectedRecommendation =
+                template_item.recommendation[randomIndex];
+              general = handleRecommendations(
+                selectedRecommendation,
+                template_item.recommendation
+              );
+            } else {
+              general = template_item.response;
+            }
+          } else {
+            general = null;
+          }
+        }
+      });
+    }
     const foundByBrand = getTemplateByBrand(groupByBrand, productName);
+    if (!match && !general && foundByBrand) {
+      foundByBrand.forEach((template_item) => {
+        const isTriggered = checkForBlackList(
+          template_item.triggers,
+          feedbackContent
+        );
+        if (template_item.rating) {
+          const ratingTransformed = transformRating(
+            template_item.rating
+          ).includes(ratingCount);
+          if (ratingTransformed) {
+            if (isTriggered) {
+              match = template_item.blacklistResponse;
+            } else if (template_item.response) {
+              const randomIndex = Math.floor(
+                Math.random() * template_item.response.length
+              );
+              const selectedResponse = template_item.response[randomIndex];
+              match = handleRecommendations(
+                selectedResponse,
+                template_item.recommendation
+              );
+            } else {
+              if (template_item.response) {
+                const randomIndex = Math.floor(
+                  Math.random() * (template_item.response as []).length
+                );
+                match = template_item.response[randomIndex];
+              } else {
+                match = null;
+              }
+            }
+          } else {
+            match = null;
+          }
+        } else {
+          if (template_item.recommendation) {
+            if (isTriggered) {
+              general = template_item.blacklistResponse;
+            } else if (template_item.recommendation) {
+              const randomIndex = Math.floor(
+                Math.random() * template_item.recommendation.length
+              );
+              const selectedRecommendation =
+                template_item.recommendation[randomIndex];
+              general = handleRecommendations(
+                selectedRecommendation,
+                template_item.recommendation
+              );
+            } else {
+              general = template_item.response;
+            }
+          } else {
+            general = null;
+          }
+        }
+      });
+    }
+    const sendButton = feedback.querySelector(
+      '[class*="Feedbacks-answer-form__text-area"]'
+    )?.nextElementSibling as HTMLButtonElement;
+    if (textarea && sendButton) {
+      if (match) {
+        sendResponse(textarea, sendButton, match);
+        return;
+      } else if (general) {
+        sendResponse(textarea, sendButton, general);
+        return;
+      } else {
+        console.log("Unable to respond");
+      }
+    }
     feedback.classList.add("done");
   });
-
   console.log("DONE");
 };
 
@@ -76,8 +207,37 @@ Disctionary:
     opacity: unset - ready to send
     class: Button-link--success* - success
 */
-
-function sendResponse(feedback: HTMLElement) {}
+const AWAIT_TIME = 300;
+function sendResponse(
+  textarea: HTMLTextAreaElement,
+  sentButton: HTMLButtonElement,
+  response: string
+) {
+  if (sentButton.querySelector("div")) {
+    setTimeout(() => {
+      sendResponse(textarea, sentButton, response);
+    }, AWAIT_TIME);
+  } else if (sentButton.style.opacity === ".4") {
+    textarea.focus();
+    const inputEvent = new Event("input", { bubbles: true });
+    textarea.dispatchEvent(inputEvent);
+    textarea.value = response;
+    const changeEvent = new Event("change", { bubbles: true });
+    textarea.dispatchEvent(changeEvent);
+    sentButton.disabled = false;
+    const clickEventBtn = new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+      view: window,
+    });
+    sentButton.dispatchEvent(clickEventBtn);
+    setTimeout(() => {
+      sendResponse(textarea, sentButton, response);
+    }, AWAIT_TIME);
+  } else if (buttonCheckSuccess(sentButton)) {
+    return;
+  }
+}
 
 function findArticleWB(element: HTMLElement): string | null {
   const regex = /\d{9}/;
@@ -85,9 +245,48 @@ function findArticleWB(element: HTMLElement): string | null {
   return matches ? matches[0] : null;
 }
 
-function transformRating(input: string) {
-  const result = [];
+function buttonCheckSuccess(element: HTMLElement): boolean {
+  const classNames = Array.from(element.classList);
+  for (const className of classNames) {
+    if (className.startsWith("Button-link--success__")) {
+      return true;
+    }
+  }
+  return false;
+}
 
+function handleRecommendations(
+  feedback: string,
+  recomendations: undefined | string[]
+) {
+  if (!recomendations) {
+    return feedback;
+  }
+  const patternRegex = /r{(\d+)}/;
+  const match = RegExp(patternRegex).exec(feedback);
+  if (!match) {
+    return feedback;
+  }
+  const patternNumber = Number(match[1]);
+  const availableStrings = recomendations.slice();
+  const selectedStrings = [];
+
+  for (let i = 0; i < patternNumber; i++) {
+    if (availableStrings.length === 0) {
+      break;
+    }
+    const randomIndex = Math.floor(Math.random() * availableStrings.length);
+    const selectedString = availableStrings.splice(randomIndex, 1)[0];
+    selectedStrings.push(selectedString);
+  }
+  const replacedString = selectedStrings.join(", ");
+
+  return feedback.replace(patternRegex, replacedString);
+}
+
+function transformRating(input: string) {
+  const result: number[] = [];
+  if (typeof +input.slice(0, -1) !== "number") return result;
   if (input.endsWith("+")) {
     const number = parseInt(input.slice(0, -1));
     for (let i = number; i <= 5; i++) {
@@ -106,6 +305,30 @@ function transformRating(input: string) {
   return result;
 }
 
+function checkForBlackList(
+  triggers: string[] = [],
+  response: string | null = ""
+): boolean {
+  if (!response) return false;
+  const notIndexSet = new Set<number>();
+  const secondList = response.split(" ");
+  for (let i = 0; i < secondList.length; i++) {
+    if (secondList[i] === "не") {
+      notIndexSet.add(i);
+    }
+  }
+  for (let word of triggers) {
+    if (secondList.includes(word)) {
+      const wordIndex = secondList.indexOf(word);
+      if (!notIndexSet.has(wordIndex - 1)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 function groupByProperties(items: TemplateItem[]): {
   groupByBrand: BrandsImage;
   groupByArticle: ArticlesImage;
@@ -121,7 +344,8 @@ function groupByProperties(items: TemplateItem[]): {
     if (item.articleWB && !groupByArticle[item.articleWB]) {
       groupByArticle[item.articleWB.toLocaleLowerCase()] = [];
     }
-
+    console.log(item.brand);
+    if (item.brand) console.log(groupByBrand[item.brand]);
     if (item.brand) groupByBrand[item.brand].push(item);
     if (item.articleWB) groupByArticle[item.articleWB].push(item);
   }
