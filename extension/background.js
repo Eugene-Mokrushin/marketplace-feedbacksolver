@@ -9,11 +9,8 @@ chrome.webRequest.onResponseStarted.addListener(
   async (details) => {
     if (details && details.method === "PATCH") {
       if (details.statusCode === 200) {
-        console.log('accepted 1')
         const tab = await chrome.tabs.query({ active: true, currentWindow: true })
-        const response = await chrome.tabs.sendMessage(tab[0].id, { action: "Hello Mom!" })
-        console.log(response)
-        console.log('from extension')
+        await chrome.tabs.sendMessage(tab[0].id, { action: "sent" })
       } else {
         console.log('rejected')
       }
