@@ -12,22 +12,22 @@ export const runWildberriesBasic = (
   config?: Config
 ) => {
   const { groupByBrand, groupByArticle } = groupByProperties(template);
-
   const mainFeedbackClass = ".FeedbacksCardsView__list";
   const allFeedbacksOnPage = document.querySelector(mainFeedbackClass);
   const feedbacksList = allFeedbacksOnPage?.querySelectorAll(
     mainFeedbackClass + "-item"
   );
-  feedbacksList?.forEach((feedback) => {
+  if (!feedbacksList) return;
+  const feedbackListArr = Array.from(feedbacksList).reverse();
+  feedbackListArr.forEach(async (feedback) => {
     feedback.scrollIntoView({ block: "center" });
+    await delay();
     const productNameElement = feedback.querySelector(
       '[class*="ProductInfo__name__"]'
     );
-
     const productName: string[] = productNameElement?.textContent
       ? productNameElement.textContent.split(" ").map((w) => w.toLowerCase())
       : [];
-
     const feedbackContentElement = feedback.querySelector(
       '[class*="ProductInfo__content__"]'
     );
@@ -53,12 +53,12 @@ export const runWildberriesBasic = (
         }
       }
     });
-
     const buttonToOpen = feedback
       .querySelector('[class*="Toggle-open-button__"]')
       ?.querySelector("button");
     if (buttonToOpen) {
       buttonToOpen.click();
+      await delay();
     }
     const textarea = feedback.querySelector("textarea");
     const foundByArticle = codeWB ? groupByArticle[codeWB] : null;
@@ -186,12 +186,13 @@ export const runWildberriesBasic = (
     )?.nextElementSibling as HTMLButtonElement;
     if (textarea && sendButton) {
       if (match) {
-        sendResponse(textarea, sendButton, match);
+        await sendResponse(textarea, sendButton, match);
         return;
       } else if (general) {
-        sendResponse(textarea, sendButton, general);
+        await sendResponse(textarea, sendButton, general);
         return;
       } else {
+        await delay();
         console.log("Unable to respond");
       }
     }
@@ -199,7 +200,6 @@ export const runWildberriesBasic = (
   });
   console.log("DONE");
 };
-
 /*
 Disctionary:
   Send button:
@@ -207,20 +207,24 @@ Disctionary:
     opacity: unset - ready to send
     class: Button-link--success* - success
 */
-const AWAIT_TIME = 300;
-function sendResponse(
+const AWAIT_TIME = 1000;
+async function sendResponse(
   textarea: HTMLTextAreaElement,
   sentButton: HTMLButtonElement,
   response: string
-) {
+): Promise<boolean> {
+  const buttonOpacity = window
+    .getComputedStyle(sentButton)
+    .getPropertyValue("opacity");
   if (sentButton.querySelector("div")) {
-    setTimeout(() => {
-      sendResponse(textarea, sentButton, response);
-    }, AWAIT_TIME);
-  } else if (sentButton.style.opacity === ".4") {
+    await delay();
+    const res = await sendResponse(textarea, sentButton, response);
+    if (res) return true;
+  } else if (buttonOpacity === "0.4") {
     textarea.focus();
     const inputEvent = new Event("input", { bubbles: true });
     textarea.dispatchEvent(inputEvent);
+    console.log(textarea);
     textarea.value = response;
     const changeEvent = new Event("change", { bubbles: true });
     textarea.dispatchEvent(changeEvent);
@@ -231,17 +235,21 @@ function sendResponse(
       view: window,
     });
     sentButton.dispatchEvent(clickEventBtn);
-    setTimeout(() => {
-      sendResponse(textarea, sentButton, response);
-    }, AWAIT_TIME);
+    await delay();
+    const res = await sendResponse(textarea, sentButton, response);
+    if (res) return true;
   } else if (buttonCheckSuccess(sentButton)) {
-    return;
+    return true;
   }
+  return false;
+}
+function delay(ms: number = AWAIT_TIME) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function findArticleWB(element: HTMLElement): string | null {
   const regex = /\d{9}/;
-  const matches = element.innerHTML.match(regex);
+  const matches = RegExp(regex).exec(element.innerHTML);
   return matches ? matches[0] : null;
 }
 
@@ -337,20 +345,37 @@ function groupByProperties(items: TemplateItem[]): {
   const groupByArticle: ArticlesImage = {};
 
   for (const item of items) {
-    if (item.brand && !groupByBrand[item.brand]) {
-      groupByBrand[item.brand.toLocaleLowerCase()] = [];
-    }
+    const brand = item.brand ? item.brand.toLowerCase() : null;
+    const article = transformArticle(item.articleWB);
 
-    if (item.articleWB && !groupByArticle[item.articleWB]) {
-      groupByArticle[item.articleWB.toLocaleLowerCase()] = [];
-    }
-    console.log(item.brand);
-    if (item.brand) console.log(groupByBrand[item.brand]);
-    if (item.brand) groupByBrand[item.brand].push(item);
-    if (item.articleWB) groupByArticle[item.articleWB].push(item);
+    createGroupIfMissing(groupByBrand, brand);
+    createGroupIfMissing(groupByArticle, article);
+
+    if (brand) groupByBrand[brand].push(item);
+    if (article) groupByArticle[article].push(item);
   }
 
   return { groupByBrand, groupByArticle };
+}
+
+function transformArticle(
+  articleWB: string | number | null | undefined
+): string | null {
+  if (articleWB === null || articleWB === undefined) {
+    return null;
+  }
+
+  if (typeof articleWB === "number") {
+    return articleWB.toString().toLowerCase();
+  }
+
+  return articleWB.toLowerCase();
+}
+
+function createGroupIfMissing(group: any, key: string | null): void {
+  if (key && !(key in group)) {
+    group[key] = [];
+  }
 }
 
 function getTemplateByBrand(obj: BrandsImage, words: string[]) {

@@ -13,7 +13,6 @@ import {
   signOut,
   onAuthStateChanged,
   User,
-  GoogleAuthProvider,
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase";
@@ -39,7 +38,6 @@ export const UserContext = createContext<UserContextProps>({
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [username, setUsername] = useState(user?.displayName ?? "");
-  const provider = new GoogleAuthProvider();
 
   const createUser = useCallback(async (email: string, password: string) => {
     const res = await createUserWithEmailAndPassword(auth, email, password);
